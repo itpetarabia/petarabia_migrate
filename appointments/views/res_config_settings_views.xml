@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record id="res_config_settings_view_form_appointment" model="ir.ui.view">
+        <field name="name">res.config.settings.view.form.inherit.appointment</field>
+        <field name="model">res.config.settings</field>
+        <field name="priority" eval="10"/>
+        <field name="inherit_id" ref="base.res_config_settings_view_form" />
+        <field name="arch" type="xml">
+            <xpath expr="//div[hasclass('settings')]" position="inside">
+                <div class="app_settings_block" data-string="Appointment" string="Appointment" data-key="appointments" groups="point_of_sale.group_pos_manager">
+                    <h2>Appointments</h2>
+                    <div class="row mt16 o_settings_container">
+                    	<div class="col-12 col-lg-6 o_setting_box" title="Select Reminders here, that will show in Appointments.">
+                            <div class="o_setting_left_pane"/>
+                            <div class="o_setting_right_pane">
+                                <span class="o_form_label">Reminders</span>
+                                <div class="text-muted">
+                                    Show the default Reminders
+                                </div>
+                                <div class="content-group">
+                                        <div class="row mt16">
+                                            <label string="Reminders" for="alarm_ids" class="col-lg-3 o_light_label"/>
+                                            <field name="alarm_ids" widget="many2many_tags"/>
+                                        </div>
+                                </div>
+                                
+                            </div>
+                            
+                        </div>
+                    </div>
+                </div>
+            </xpath>
+        </field>
+    </record>
+
+    <record id="action_appointment_config_settings" model="ir.actions.act_window">
+        <field name="name">Settings</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="res_model">res.config.settings</field>
+        <field name="view_id" ref="res_config_settings_view_form_appointment"/>
+        <field name="view_mode">form</field>
+        <field name="target">inline</field>
+        <field name="context">{'module' : 'appointments'}</field>
+    </record>
+	
+	<menuitem id="appointment_menu_root"
+           name="Appointment"
+           web_icon="appointments,static/description/icon.png"
+           sequence="18"/>
+	<menuitem id="menu_appointments_config"
+           name="Configuration"
+           parent="appointment_menu_root"
+           sequence="6"
+           groups="base.group_system"/>
+    <menuitem id="menu_appointment_general_settings"
+        name="Settings"
+        parent="menu_appointments_config"
+        sequence="0"
+        action="action_appointment_config_settings"
+        groups="base.group_system"/>
+
+</odoo>

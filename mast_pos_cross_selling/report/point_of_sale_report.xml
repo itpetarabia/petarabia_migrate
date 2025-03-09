@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    
+    <record id="action_report_cross_selling_xlx" model="ir.actions.report">
+        <field name="name">Cross Selling Excel</field>
+        <field name="model">pos.cross.selling.wizard</field>
+        <field name="report_type">xlsx</field>
+        <field name="report_name">mast_pos_cross_selling.report_cross_selling_sheet_xls</field>
+        <field name="report_file">mast_pos_cross_selling.report_cross_selling_sheet_xls</field>
+    </record>
+    
+
+</odoo>

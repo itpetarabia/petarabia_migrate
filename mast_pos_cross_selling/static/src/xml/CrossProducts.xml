@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!--Template for pos cross-selling-->
+
+<templates id="template" xml:space="preserve">
+    <t t-name="CrossProducts" owl="1">
+        <div role="dialog" class="modal-dialog">
+            <div class="popup popup-text">
+                <header class="title">
+                    <t t-esc="props.title"/>
+                </header>
+                <div class="div">
+                    <section class="full-content">
+                        <div class="partner-window">
+                            <section class="list">
+                                <div class="container">
+                                    <div class="subwindow-container-fix scrollable-y">
+                                        <t t-foreach="props.product" t-as="product"
+                                           t-key="product.id" t-att-data-id="product.id"
+                                           t-on-click="() => this._onClickOrder(order)">
+                                            <div class='col product'
+                                                     t-on-click="(event) => this._onClickOrder(event, product)">
+                                                <t t-if="product.selected == true">
+                                                    <div><span class="ribbon-3">Selected</span></div>
+                                                </t>
+
+                                                <div class="product-img2">
+                                                    <img t-att-src="product.image" t-att-alt="product.name" style="padding: 0px; margin: 0px; height: 38px;"/>
+
+                                                </div>
+                                                <div class="product-content">
+                                                <div class="product-name">
+                                                    <t t-esc="product.name"/>
+                                                    <div class="cross-price-tag">
+                                                        <span t-esc="product.symbol"/>
+                                                        <span t-esc="product.price"/>
+                                                    </div>
+                                                </div>
+
+
+                                                </div>
+                                            </div>
+                                        </t>
+                                    </div>
+                                </div>
+                            </section>
+                        </div>
+                    </section>
+                </div>
+                <footer class="footer">
+                    <div class="button highlight confirm" t-on-click="confirm">
+                        Add
+                    </div>
+                    <div class="button cancel" t-on-click="cancel">
+                        Cancel
+                    </div>
+                </footer>
+            </div>
+        </div>
+    </t>
+
+
+
+
+    
+</templates>

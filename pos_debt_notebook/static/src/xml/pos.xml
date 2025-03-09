@@ -1,0 +1,547 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!--Copyright 2016-2018 Ivan Yelizariev <https://it-projects.info/team/yelizariev>
+    Copyright 2016-2017 Stanislav Krotov <https://it-projects.info/team/ufaks>
+    Copyright 2018 Gabbasov Dinar <https://it-projects.info/team/GabbasovDinar>
+    Copyright 2018 Kolushov Alexandr <https://it-projects.info/team/KolushovAlexandr>
+    License MIT (https://opensource.org/licenses/MIT). -->
+<templates id="template" xml:space="preserve">
+    <!--
+    <t t-name="CreditLine">
+        <div
+            t-if="widget.pos.config.debt_type == 'debt' and deb.balance!=0"
+            class="client-detail"
+        >
+            <span t-attf-class="label increased_width notbold client-debt">
+                <t t-if='deb.journal_id'>
+                    <t t-esc="deb.journal_id[1]" />
+                </t>
+            </span>
+            <span
+                t-attf-class="detail client-debt #{deb.balance lt 0 and 'positive' or deb.balance gt 0 and 'negative' or 'empty'}"
+            >
+                <t t-esc='widget.format_currency(- deb.balance)' />
+            </span>
+        </div>
+        <div
+            t-if="widget.pos.config.debt_type == 'credit' and deb.balance!=0"
+            class="client-detail"
+        >
+            <span t-attf-class="label increased_width notbold detail client-credit">
+                <t t-if='deb.journal_id'>
+                    <t t-esc="deb.journal_id[1]" />
+                </t>
+            </span>
+            <span
+                t-attf-class="detail client-credit #{deb.balance gt 0 and 'positive' or deb.balance lt 0 and 'negative' or 'empty'}"
+            >
+                <t t-esc='widget.format_currency(deb.balance)' />
+            </span>
+        </div>
+    </t>
+    <t t-name="CreditList">
+        <t t-foreach="_.values(debts)" t-as="deb">
+            <t t-call="CreditLine" />
+        </t>
+    </t>
+    -->
+
+
+    <t t-name="ClientDetailsEdit" t-inherit="point_of_sale.ClientDetailsEdit" t-inherit-mode="extension" owl="1">
+        <xpath expr="//div[hasclass('client-details-right')]" position="inside">
+            <div class="client-detail" t-if="env.pos.config.debt_type == 'debt'">
+                <span class="label">Total Debit</span>
+                <input t-attf-class="detail client-debt #{props.partner.debt gt 0 and 'positive' or props.partner.debt lt 0 and 'negative' or 'empty'}" name="debit"
+                       t-on-change="captureChange" t-att-value="env.pos.format_currency(props.partner.debt) || ''"
+                       placeholder="0"
+                       t-att-readonly="isNotManager"/>
+            </div>
+            <div class="client-detail" t-if="env.pos.config.debt_type == 'credit'">
+                <span class="label">Total Credit</span>
+                <input t-attf-class="detail client-debt #{props.partner.debt lt 0 and 'negative' or props.partner.debt gt 0 and 'positive' or 'empty'}" name="credit"
+                       t-on-change="captureChange" t-att-value="env.pos.format_currency(- props.partner.debt) || ''"
+                       placeholder="0"
+                       t-att-readonly="isNotManager"/>
+            </div>
+        </xpath>
+
+    </t>
+    <t t-name="ClientLine" t-inherit="point_of_sale.ClientLine" t-inherit-mode="extension" owl="1">
+        <xpath expr="//tr/td[5]" position="after">
+            <td
+                t-attf-class="client-debt #{((env.pos.config.debt_type == 'debt' and props.partner.debt lt 0) or (env.pos.config.debt_type == 'credit' and props.partner.debt lt 0)) ? 'negative' : ''} #{((env.pos.config.debt_type == 'debt' and props.partner.debt gt 0) or (env.pos.config.debt_type == 'credit' and props.partner.debt gt 0)) ? 'positive' : ''}"
+            >
+                <t
+                    t-if="env.pos.config.debt_type == 'debt'"
+                    t-esc='env.pos.format_currency(props.partner.debt)'
+                />
+                <t
+                    t-if="env.pos.config.debt_type == 'credit'"
+                    t-esc='env.pos.format_currency(-props.partner.debt)'
+                />
+            </td>
+            <!--<td>
+                <t t-esc='env.pos.format_currency(props.partner.debt)' />
+                <span t-if="highlight"><br/></span>
+            </td>-->
+        </xpath>
+    </t>
+    <t t-name="ClientListScreen" t-inherit="point_of_sale.ClientListScreen" t-inherit-mode="extension" owl="1">
+        <xpath expr="//div[hasclass('client-window')]/section[2]" position="replace">
+            <section class="subwindow list">
+                <div class="subwindow-container">
+                    <t t-if="!state.detailIsShown and state.debtHistoryIsShown">
+                        <div t-if="state.debtHistoryIsShown" class="client-details-contents subwindow-container-fix">
+                            <!--<ClientDebtHistory t-props="state.editModeProps"
+                                               t-on-cancel-edit="cancelEdit"/>-->
+                            <table id="debt_history" class='client-list'>
+                                <thead>
+                                    <tr>
+                                        <th>Date/Time</th>
+                                        <th>POS</th>
+                                        <th>Products</th>
+                                        <th>Credit Payments</th>
+                                        <th>Payment Method</th>
+                                        <th>Balance</th>
+                                        <th>Total Balance</th>
+                                    </tr>
+                                </thead>
+                                <tbody id='debt_history_contents'>
+
+                                </tbody>
+                            </table>
+                        </div>
+                    </t>
+                    <t t-else="">
+                    <div t-if="!state.detailIsShown" class="subwindow-container-fix scrollable-y">
+                        <table class="client-list">
+                            <thead>
+                                <tr>
+                                    <th>Name</th>
+                                    <th t-if="!env.isMobile">Address</th>
+                                    <th t-if="!env.isMobile">Phone</th>
+                                    <th t-if="env.isMobile">ZIP</th>
+                                    <th>Email</th>
+                                    <th t-if="env.pos.config.debt_type == 'debt'">Debt</th>
+                                    <th t-if="env.pos.config.debt_type == 'credit'">Credit</th>
+                                </tr>
+                            </thead>
+                            <tbody class="client-list-contents">
+                                <t t-foreach="clients" t-as="partner"
+                                   t-key="partner.id">
+                                    <ClientLine partner="partner"
+                                                selectedClient="state.selectedClient"
+                                                detailIsShown="state.detailIsShown"
+                                                t-on-click-client="clickClient" />
+                                </t>
+                            </tbody>
+                        </table>
+                    </div>
+                    </t>
+                </div>
+            </section>
+
+
+        </xpath>
+
+        <xpath expr="//div[hasclass('top-content')]/div[2]" position="after">
+            <div t-if="isDebtHistoryVisible" t-on-click="clickShowDebtHistory"
+                  class="button debt_notebook_button highlight">
+                <span> Show Debt History</span>
+            </div>
+            <div t-if="isDebtHistoryVisible" t-on-click="clickPayFullDebt"
+                  class="button debt_notebook_button highlight">
+                <span> Pay Full Debt</span>
+            </div>
+
+        </xpath>
+
+
+        <!--<xpath expr="//tr/th[5]" position="after">
+            <th t-if="env.pos.config.debt_type == 'debt'">Debt</th>
+            <th t-if="env.pos.config.debt_type == 'credit'">Credit</th>
+        </xpath>-->
+    </t>
+
+    <t t-name="ActionpadWidget" t-inherit="point_of_sale.ActionpadWidget" t-inherit-mode="extension" owl="1">
+        <xpath expr="//div[hasclass('actionpad')]/button[1]" position="inside">
+            <t t-if="client">
+                <t t-if="client.debt">
+                    <t t-if="env.pos.config.debt_type == 'debt'">
+                        <span
+                            t-attf-class="client-debt #{client.debt lt 0 and 'negative' or client.debt gt 0 and 'positive' or ''}"
+                        >
+                            <t
+                                t-esc="(' [Debt: ' + env.pos.format_currency(client.debt) + ']' || '')"
+                            />
+                        </span>
+                    </t>
+                    <t t-if="env.pos.config.debt_type == 'credit'">
+                        <span
+                            t-attf-class="client-credit #{client.debt lt 0 and 'positive' or client.debt gt 0 and 'negative' or ''}"
+                        >
+                            <t
+                                t-esc="(' [Credit: ' + env.pos.format_currency(- client.debt) + ']' || '')"
+                            />
+                        </span>
+                    </t>
+                </t>
+            </t>
+        </xpath>
+     </t>
+
+    <!--
+    <t t-extend="ActionpadWidget">
+        <t t-jquery="t[t-esc*='widget.pos.get_client().name']" t-operation="after">
+            <br />
+            <t t-set="client" t-value="widget.pos.get_client()" />
+            <t t-if="client.debt">
+                <t t-if="widget.pos.config.debt_type == 'debt'">
+                    <span
+                        t-attf-class="client-debt #{client.debt lt 0 and 'negative' or client.debt gt 0 and 'positive' or ''}"
+                    >
+                        <t
+                            t-esc="(' [Debt: ' + widget.format_currency(client.debt) + ']' || '')"
+                        />
+                    </span>
+                </t>
+                <t t-if="widget.pos.config.debt_type == 'credit'">
+                    <span
+                        t-attf-class="client-credit #{client.debt lt 0 and 'positive' or client.debt gt 0 and 'negative' or ''}"
+                    >
+                        <t
+                            t-esc="(' [Credit: ' + widget.format_currency(- client.debt) + ']' || '')"
+                        />
+                    </span>
+                </t>
+            </t>
+        </t>
+    </t>
+    -->
+    <!--
+    <t t-name="CreditNote">
+        <t t-if="debt != 0">
+            <t t-if="widget.pos.config.debt_type == 'debt'">
+                <span
+                    t-attf-class="client-debt #{(widget.pos.get_client() and debt gt 0) ? 'negative' : ''} #{(widget.pos.get_client() and debt lt 0) ? 'positive' : ''}"
+                >
+                    <t
+                        t-esc="(widget.pos.get_client() ? ' [Debt: ' + widget.pos.format_currency(debt) + ']': '')"
+                    />
+                </span>
+            </t>
+            <t t-if="widget.pos.config.debt_type == 'credit'">
+                <span
+                    t-attf-class="client-credit #{(widget.pos.get_client() and debt lt 0) ? 'positive' : ''} #{(widget.pos.get_client() and debt gt 0) ? 'negative' : ''}"
+                >
+                    <t
+                        t-esc="(widget.pos.get_client() ? ' [Credit: ' + widget.pos.format_currency(debt) + ']': '')"
+                    />
+                </span>
+            </t>
+        </t>
+    </t>
+    -->
+
+    <t t-name="PaymentMethodButton" t-inherit="point_of_sale.PaymentMethodButton" t-inherit-mode="extension" owl="1">
+    <!--
+        <xpath expr="//div[@class='button paymentmethod']" position="replace">
+            <div class="button paymentmethod" t-att-data-id="props.paymentMethod.id"
+                 t-on-click="trigger('new-payment-line', props.paymentMethod)">
+                <div class="payment-name">
+                    <t t-esc="props.paymentMethod.name" />
+                </div>
+            </div>
+    -->
+            <!--<t t-set="debt_val" t-value="0"/>
+            <t t-if="env.pos.get_client() and props.paymentMethod and env.pos.get_client().debts[props.paymentMethod.id].balance">
+            <t t-set="debt_val" t-value="env.pos.get_client().debts[props.paymentMethod.id].balance"/>
+            </t>
+        -->
+            <xpath expr="//div[@class='payment-name']" position="replace">
+                <t t-esc="props.paymentMethod.name" />
+                    <t t-if="props.debt_val">
+                    <t t-set="debt_val" t-value="props.debt_val"/>
+                    <t t-if="env.pos.config.debt_type == 'debt'">
+                        <span
+                            t-attf-class="client-debt #{(env.pos.get_client() and debt_val gt 0) ? 'negative' : ''} #{(env.pos.get_client() and debt_val lt 0) ? 'positive' : ''}"
+                        >
+                            <t
+                                t-esc="(debt_val ? ' [Debt: ' + env.pos.format_currency(- debt_val) + ']': '')"
+                            />
+                        </span>
+                    </t>
+                    <t t-if="env.pos.config.debt_type == 'credit'">
+                        <span
+                            t-attf-class="client-credit #{(env.pos.get_client() and debt_val lt 0) ? 'positive' : ''} #{(env.pos.get_client() and debt_val gt 0) ? 'negative' : ''}"
+                        >
+                            <t
+                                t-esc="(debt_val ? ' [Credit: ' + env.pos.format_currency( debt_val) + ']': '')"
+                            />
+                        </span>
+                    </t>
+                    </t>
+
+
+        </xpath>
+
+    </t>
+
+    <t t-name="PaymentScreen" t-inherit="point_of_sale.PaymentScreen" t-inherit-mode="extension" owl="1">
+        <xpath expr="//t[@t-if='!env.pos.get_client()']" position="after">
+            <span
+                t-attf-class="client-debt #{(env.pos.get_client() and env.pos.get_client().debt lt 0) ? 'negative' : ''} #{(env.pos.get_client() and env.pos.get_client().debt gt 0) ? 'positive' : ''}"
+            >
+                <t
+                    t-esc="(env.pos.get_client() and env.pos.config.debt_type == 'debt' ? ' [Debt: ' + env.pos.format_currency_no_symbol(env.pos.get_client().debt) + ']': '')"
+                />
+            </span>
+            <span
+                t-attf-class="client-credit #{(env.pos.get_client() and env.pos.get_client().debt lt 0) ? 'positive' : ''} #{(env.pos.get_client() and env.pos.get_client().debt gt 0) ? 'negative' : ''}"
+            >
+                <t
+                    t-esc="(env.pos.get_client() and env.pos.config.debt_type == 'credit' ? ' [Credit: ' + env.pos.format_currency_no_symbol(-env.pos.get_client().debt) + ']': '')"
+                />
+            </span>
+        </xpath>
+        <xpath expr="//div[hasclass('customer-button')]" position="after">
+            <div class="pay-debt-button">
+                <div class="button" t-on-click="selectPayDebt" t-if="env.pos.get_client() and env.pos.get_client().debt">
+                    <i class="fa fa-money" role="img" aria-label="Currency"
+                       title="Pay Debt" />Pay Debt
+                </div>
+            </div>
+            <!--<div class="button pay-full-debt oe_hidden">
+                <i class="fa fa-money" role="img" aria-label="Currency"
+                       title="Pay Debt" />Pay Debt
+            </div>-->
+        </xpath>
+        <!--
+        <xpath expr="//div[hasclass('paymentmethods-container')]" position="after">
+            <div class="pay-debt-button">
+                <div class="button" t-on-click="click_autopay_validation" t-if="env.pos.get_client() and env.pos.get_client().debt">
+                    <i class="fa fa-angle-double-right" role="img" aria-label="Currency"
+                       title="Validate" />Validate
+                </div>
+            </div>
+        </xpath>
+        -->
+        <xpath expr="//div[@class='paymentmethods']" position="replace">
+                <div class="paymentmethods">
+                    <t t-foreach="payment_methods_from_config" t-as="paymentMethod"
+                       t-key="paymentMethod.id">
+                        <t t-set="debt_val" t-value="0"/>
+                        <t t-if="env.pos.get_client() and paymentMethod and env.pos.get_client().debts[paymentMethod.id]">
+                        <t t-set="debt_val" t-value="env.pos.get_client().debts[paymentMethod.id].balance"/>
+                        </t>
+                        <PaymentMethodButton paymentMethod="paymentMethod" debt_val="debt_val"/>
+                    </t>
+                </div>
+         </xpath>
+    </t>
+
+    <!--
+    <t t-extend="ClientListScreenWidget">
+        <t t-jquery=".button.next" t-operation="before">
+            <div id="client_list_header_buttons">
+                <span
+                    id="show_debt_history"
+                    class="button debt_notebook_button oe_hidden highlight"
+                >
+                    Show Debt History
+                </span>
+                <span
+                    id="show_customers"
+                    class="button debt_notebook_button oe_hidden highlight"
+                >
+                    Show Customers
+                </span>
+                <span
+                    id="set-customer-pay-full-debt"
+                    class="button debt_notebook_button oe_hidden highlight"
+                >
+                    Pay Full Debt
+                </span>
+            </div>
+        </t>
+        <t t-jquery="table.client-list tr" t-operation="append">
+            <th id="client-list-debt">Debt</th>
+            <th id="client-list-credit">Credit</th>
+        </t>
+        <t t-jquery="table.client-list" t-operation="after">
+            <table id="debt_history" class='client-list oe_hidden'>
+                <thead>
+                    <tr>
+                        <th>Date/Time</th>
+                        <th>POS</th>
+                        <th>Products</th>
+                        <th>Credit Payments</th>
+                        <th>Payment Method</th>
+                        <th>Balance</th>
+                        <th>Total Balance</th>
+                    </tr>
+                </thead>
+                <tbody id='debt_history_contents'>
+                </tbody>
+            </table>
+        </t>
+    </t>
+    <t t-extend="ClientLine">
+        <t t-jquery="tr.client-line" t-operation="append">
+            <td
+                t-attf-class="client-debt #{((widget.pos.config.debt_type == 'debt' and partner.debt lt 0) or (widget.pos.config.debt_type == 'credit' and partner.debt lt 0)) ? 'negative' : ''} #{((widget.pos.config.debt_type == 'debt' and partner.debt gt 0) or (widget.pos.config.debt_type == 'credit' and partner.debt gt 0)) ? 'positive' : ''}"
+            >
+                <t
+                    t-if="widget.pos.config.debt_type == 'debt'"
+                    t-esc='widget.format_currency(partner.debt)'
+                />
+                <t
+                    t-if="widget.pos.config.debt_type == 'credit'"
+                    t-esc='widget.format_currency(-partner.debt)'
+                />
+            </td>
+        </t>
+    </t>
+    -->
+    <t t-name="DebtHistoryLine">
+        <tr>
+            <td>
+                <t t-esc="line ? line.date : ''" />
+            </td>
+            <td>
+                <t t-esc="line ? line.config_id[1] : ''" />
+            </td>
+            <td>
+                <t t-esc="line ? line.product_list : ''" />
+            </td>
+            <td class="pos_text_center">
+                <t
+                    t-esc="line and line.balance ? line.balance : ''"
+                />
+            </td>
+            <td>
+                <t t-esc="line ? line.payment_method_code : ''" />
+            </td>
+            <td class="pos_text_center">
+                <span
+                    t-attf-class="client-credit #{(line and line.total_journal lt 0) ? 'negative' : ''} #{(line and line.total_journal gt 0) ? 'positive' : ''}"
+                >
+                    <t
+                        t-esc="line and line.total_journal ? line.total_journal : ''"
+                    />
+                </span>
+            </td>
+            <td class="pos_text_center">
+                <span
+                    t-attf-class="client-#{debt_type} #{(line and line.total_balance lt 0) ? 'negative' : ''} #{(line and line.total_balance gt 0) ? 'positive' : ''}"
+                >
+                    <t
+                        t-esc="line and line.total_balance ? line.total_balance : ''"
+                    />
+                </span>
+            </td>
+        </tr>
+    </t>
+    <t t-name="DebtHistoryLoadMore">
+        <tr>
+            <td colspan="6" class="pos_text_center">
+                <div id="loading_history" class="o_spinner oe_hidden">
+                    <i class="fa fa-spinner fa-spin fa-4" />
+                </div>
+                <span id="load_more" class="button highlight">Load More</span>
+            </td>
+        </tr>
+    </t>
+    <t t-name="OrderReceipt" t-inherit="point_of_sale.OrderReceipt" t-inherit-mode="extension" owl="1">
+        <xpath expr="//div[hasclass('before-footer')]" position="inside">
+            <div t-if="receipt.debt_before or receipt.debt_after" class="debt">
+                <t
+                    t-set="debt_label"
+                    t-value="receipt.debt_type=='debt' and 'Debt' or 'Credits'"
+                />
+                <t t-set="debt_sign" t-value="receipt.debt_type=='debt' and 1 or -1" />
+                <br/>
+                <div class="pos-receipt-credit-data">
+                    Prev <t t-esc="debt_label" />: <t t-esc='debt_sign * receipt.debt_before' />
+                    <span class="pos-receipt-right-align">
+                        New <t t-esc="debt_label" />: <t t-esc='debt_sign * receipt.debt_after' />
+                    </span>
+                </div>
+
+            </div>
+        </xpath>
+    </t>
+
+    <!--
+    <t t-name="ValidationButton">
+        <div class="bottom-left-content">
+            <div class="button autopay">
+                <div class="button-content">
+                    <span class="title" />
+                    <span>
+                        <i class='fa fa-angle-double-right' />
+                    </span>
+                </div>
+            </div>
+        </div>
+
+    </t>
+    -->
+    <!--
+    <t t-name="ThumbUpPopupWidget">
+        <div class="modal-dialog thumb-up-modal">
+            <div class="popup thumb-up-popup">
+                <div class="container thumb-up-1">
+                    <div class="icon-wrapper">
+                        <span class="icon">
+                            <i class="fa fa-thumbs-up" />
+                        </span>
+                        <div class="border">
+                            <span />
+                        </div>
+                        <div class="satellite">
+                            <span />
+                            <span />
+                            <span />
+                            <span />
+                            <span />
+                            <span />
+                        </div>
+                    </div>
+                </div>
+                <div class="container thumb-up-2">
+                    <div class="icon-wrapper-2">
+                        <span class="icon">
+                            <i class="fa fa-thumbs-up" />
+                        </span>
+                        <div class="border">
+                            <span />
+                        </div>
+                        <div class="spark">
+                            <span />
+                            <span />
+                            <span />
+                            <span />
+                            <span />
+                            <span />
+                            <span />
+                            <span />
+                            <span />
+                            <span />
+                            <span />
+                            <span />
+                            <span />
+                            <span />
+                            <span />
+                            <span />
+                            <span />
+                            <span />
+                            <span />
+                            <span />
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </t>
+    -->
+</templates>

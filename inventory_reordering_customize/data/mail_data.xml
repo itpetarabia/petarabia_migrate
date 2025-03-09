@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Template and notification section -->
+    <data noupdate="0">
+        <record id="mail_act_manager_approval_transfer_req" model="mail.activity.type">
+            <field name="name">Transfer Request Approval</field>
+            <field name="icon">fa-sun-o</field>
+            <field name="res_model_id" ref="inventory_reordering_customize.model_reordering_request"/>
+        </record>
+    </data>
+</odoo>

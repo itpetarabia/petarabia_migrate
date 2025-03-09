@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+   <data>
+    <function model="pos.appointments" name="_fill_pets"/>
+  </data>
+</odoo>

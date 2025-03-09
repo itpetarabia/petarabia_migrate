@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templates id="template" xml:space="preserve">
+
+    <t t-name="Orderline" t-inherit="point_of_sale.Orderline" t-inherit-mode="extension" owl="1">
+        <xpath expr="//ul[hasclass('info-list')]" position="inside">
+            <t t-if="props.line.get_cross_selling()">
+                <li class="info orderline-note" style="color: green">
+                    <i class="fa fa-tag" role="img" aria-label="Cross Selling" title="Cross Selling"/>
+                    <t t-esc="props.line.get_cross_selling_str()" />
+                </li>
+            </t>
+
+        </xpath>
+        <xpath expr="//span[hasclass('price')]" position="inside">
+            <br/>
+            <t t-if="props.line.get_cross_selling()">
+                <button class="o_Activity_toolButton o_Activity_uploadButton btn btn-link" t-on-click="cross_selling_button_remove">
+                    <i class="fa fa-bars"/> Cross Sale
+                </button>
+            </t>
+            <t t-else="">
+                <button class="o_Activity_toolButton o_Activity_uploadButton btn btn-link" t-on-click="cross_selling_button_add">
+                    <i class="fa fa-bars"/> Cross Sale
+                </button>
+            </t>
+        </xpath>
+
+    </t>
+
+</templates>

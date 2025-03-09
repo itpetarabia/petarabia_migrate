@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templates id="template" xml:space="preserve">
+    <t t-name="ClientDetailsEdit" t-inherit="point_of_sale.ClientDetailsEdit" t-inherit-mode="extension" owl="1">
+        <xpath expr="//div[hasclass('client-details-left')]" position="replace">
+            <div class="client-details-left">
+                    <div class="client-detail">
+                    <span class="label">Flat</span>
+                    <input class="detail client-address-street_number2" name="street_number2"
+                           t-on-change="captureChange" t-att-value="props.partner.street_number2 || ''"
+                           placeholder="Flat" />
+                    </div>
+                    <div class="client-detail">
+                    <span class="label">Bldg</span>
+                    <input class="detail client-address-street_number" name="street_number"
+                           t-on-change="captureChange" t-att-value="props.partner.street_number || ''"
+                           placeholder="Home/Building" />
+                    </div>
+                    <div class="client-detail">
+                    <span class="label">Road</span>
+                    <input class="detail client-address-street2" name="street2"
+                           t-on-change="captureChange" t-att-value="props.partner.street2 || ''"
+                           placeholder="Road" />
+                    </div>
+
+                    <div class="client-detail">
+                    <span class="label">Block</span>
+                    <input class="detail client-address-zip" name="zip"
+                           t-on-change="captureChange" t-att-value="props.partner.zip || ''"
+                           placeholder="Block" />
+                    </div>
+
+                    <div class="client-detail">
+                        <span class="label">Area</span>
+
+                        <input class="detail client-address-city" name="city"
+                               t-on-change="captureChange" t-att-value="props.partner.city || ''"
+                               placeholder="City" />
+                    </div>
+                <!--
+                    <div class="client-detail">
+                        <span class="label">Postcode</span>
+                        <input class="detail client-address-zip" name="zip"
+                               t-on-change="captureChange" t-att-value="props.partner.zip || ''"
+                               placeholder="ZIP" />
+                    </div>
+                    -->
+                    <div class="client-detail">
+                        <span class="label">State</span>
+                        <select class="detail client-address-states needsclick" name="state_id"
+                                t-on-change="captureChange">
+                            <option value="">None</option>
+                            <t t-foreach="env.pos.states" t-as="state" t-key="state.id">
+                                <option t-if="props.partner.country_id[0] == state.country_id[0]"
+                                        t-att-value="state.id"
+                                        t-att-selected="props.partner.state_id ? ((state.id === props.partner.state_id[0]) ? true : undefined) : undefined">
+                                    <t t-esc="state.name" />
+                                </option>
+                            </t>
+                        </select>
+                    </div>
+                    <div class="client-detail">
+                        <span class="label">Country</span>
+                        <select class="detail client-address-country needsclick" name="country_id"
+                                t-on-change="captureChange">
+                            <option value="">None</option>
+                            <t t-foreach="env.pos.countries" t-as="country" t-key="country.id">
+                                <option t-att-value="country.id"
+                                        t-att-selected="props.partner.country_id ? ((country.id === props.partner.country_id[0]) ? true : undefined) : undefined">
+                                    <t t-esc="country.name" />
+                                </option>
+                            </t>
+                        </select>
+                    </div>
+                </div>
+
+        </xpath>
+    </t>
+</templates>

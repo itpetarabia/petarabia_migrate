@@ -1,0 +1,273 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+		
+        <!-- Top menu item -->
+        <menuitem id="appointment_menu_root"
+            name="Appointment"
+            web_icon="appointments,static/description/icon.png"
+            sequence="18"/>
+
+        <menuitem id="appointment_menu"
+            name="Appointment"
+            parent="appointment_menu_root"
+            sequence="2"/>
+		
+		<record id="view_calendar_pos_appointments" model="ir.ui.view">
+            <field name="name">pos.appointments.calendar</field>
+            <field name="model">pos.appointments</field>
+            <field name="arch" type="xml">
+                <calendar string="Appointment" date_start="start_datetime" date_delay="duration" color="config_id" quick_add="False" event_limit="5">
+                    <field name="name"/>
+                    <field name="partner_id"/>
+                    <field name="config_id" filters="1" invisible="1"/>
+                    <!--<field name="employee_ids" write_model="calendar.contacts" write_field="partner_id" avatar_field="image_small"/>-->
+                    <field name="employee_ids" widget="many2many_tags_avatar" write_model="hr.user.pos.appointment.employee" write_field="employee_id" avatar_field="image_small"/>
+                    <!-- <field name="partner_ids" widget="many2many_tags_avatar" write_model="calendar.contacts" write_field="partner_id" avatar_field="image_128"/>
+                    -->
+                    <field name="location"/>
+                    <field name="state"/>
+                    <!--
+                    <field name="duration" widget="float_time"/>
+                    <field name="total_amt" widget="monetary"/>
+                    -->
+                </calendar>
+            </field>
+        </record>
+        <record id="view_calendar_pos_appointments_search" model="ir.ui.view">
+            <field name="name">pos.appointments.search</field>
+            <field name="model">pos.appointments</field>
+            <field name="arch" type="xml">
+                <search string="Appointment">
+                    <field name="name" string="Appointment" filter_domain="[('name','ilike',self)]"/>
+                    <field name="partner_id"/>
+                    <field name="config_id"/>
+                    <field name="employee_ids"/>
+                    <filter string="My Appointment" domain="[('user_id','=',uid)]" name="my_appointment_filter"/>
+                    <separator/>
+                    <group expand="0" string="Group By">
+                        <filter string="Point of sale" name="pos" domain="[]" context="{'group_by':'config_id'}"/>
+                    </group>
+                </search>
+            </field>
+        </record>
+
+
+        <record id="view_appointment_tree" model="ir.ui.view">
+            <field name="name">pos.appointments.tree</field>
+            <field name="model">pos.appointments</field>
+            <field name="priority">2</field>
+            <field name="arch" type="xml">
+                <tree string="Appointment" decoration-muted="state=='cancel'">
+                    <field name="name"/>
+                    <field name="partner_id"/>
+                    <field name="start_datetime" string="Starting at"/>
+	                <field name="duration" widget="float_time" string="Duration(hours)"/>
+	                <field name="location"/>
+                    <!--<field name="product_id"/>-->
+                    <field name="config_id"/>
+                    <field name="employee_ids" widget="many2many_tags"/>
+                    <!--<field name="total_amt"/>-->
+                    <field name="state" />
+                </tree>
+            </field>
+        </record>
+
+        <record id="view_appointment_form" model="ir.ui.view">
+            <field name="name">pos.appointments.form</field>
+            <field name="model">pos.appointments</field>
+            <field name="arch" type="xml">
+                <form string="Appointment" class="o_sale_order">
+                <header>
+                	<button name="action_confirm"
+                        string="Confirm" type="object" class="btn-primary"
+                        attrs="{'invisible': [('state', 'not in', ['draft'])]}"/>
+                    <!-- modify -->
+                    <!--<button name="action_payment"
+                        string="Payment" type="object" class="btn-primary"
+                        attrs="{'invisible': [('state', 'not in', ['confirmed'])]}"/>-->
+                    <button name="action_ongoing"
+                        string="Ongoing" type="object" class="btn-primary"
+                        attrs="{'invisible': [('state', 'not in', ['confirmed'])]}"/>
+                    <button name="action_ready_for_pickup"
+                        string="Ready for Pickup" type="object" class="btn-primary"
+                        attrs="{'invisible': [('state', 'not in', ['order'])]}"/>
+                    <button name="action_done"
+                        string="Done" type="object" class="btn-primary"
+                        attrs="{'invisible': [('state', 'not in', ['ready'])]}"/>
+
+
+                    <!-- NOTE: DISABLED since it's out of use -->
+                    <!-- <button name="action_cancel_meeting"
+                        string="Cancel Meeting" type="object"
+                        attrs="{'invisible': [('state', 'not in', ['confirmed','order','ready','done','paid'])]}"/> -->
+                    <button name="action_cancel" states="draft,confirmed" type="object" string="Cancel"/>
+                    <button name="action_draft" states="cancel" type="object" string="Set to Draft"/>
+                    <!-- 
+                    <button name="action_done" states="confirmed,paid" type="object" string="Done" groups="base.group_user"/>
+                    <button name="action_unlock" type="object" string="Unlock" states="done" groups="base.group_user"/>
+                    -->
+                    <field name="state" widget="statusbar" statusbar_visible="draft,confirmed,order,paid"/>
+                </header>
+                <sheet>
+                    <div class="oe_button_box" name="button_box">
+                    	<button name="action_view_meeting_appointment"
+                            type="object"
+                            class="oe_stat_button"
+                            icon="fa-calendar"
+                            
+                            attrs="{'invisible': [('meeting_count', '=', 0)]}">
+                            <field name="meeting_count" widget="statinfo" string="Meeting"/>
+                        </button>
+                    	<button name="action_view_pos_order"
+                            type="object"
+                            class="oe_stat_button"
+                            icon="fa-pencil-square-o"
+                            
+                            attrs="{'invisible': [('pos_order_count', '=', 0)]}">
+                            <field name="pos_order_count" widget="statinfo" string="POS Order"/>
+                        </button>
+                    </div>
+                    
+                    <div class="oe_title">
+                        <h1>
+                            <field name="name" readonly="1" required="0"/>
+                        </h1>
+                    </div>
+                    <group>
+                        <group>
+                        	<field name="company_id" invisible="1"/>
+                        	<field name="currency_id" invisible="1"/>
+                        	<field name="partner_id"/>
+                            <field name='pet_ids' widget="many2many_tags" options="{'no_create': True}"/>
+                        	<!--<field name="product_id" domain="[('type','in',['service'])]" options="{'no_create': True}"/>
+                        	<field name="untax_amt" widget='monetary'  options="{'currency_field': 'currency_id'}"/>
+                        	<field name="tax_ids" widget="many2many_tags" options="{'no_create': True}" domain="[('type_tax_use','=','sale')]"/>
+                        	<field name="total_amt" widget='monetary'  options="{'currency_field': 'currency_id'}"/>
+                        	-->
+                        	<field name="config_id" widget="many2one_tags" options="{'no_create': True}"/>
+                        	<field name="description"/>
+                            <field name="user_id" invisible="1"/>
+                        </group>
+                        <group>
+                        	<field name="start_datetime" string="Starting at"/>
+	                        <label for="duration"/>
+	                        <div>
+	                            <field name="duration" widget="float_time" class="oe_inline"/>
+	                            <span> hours</span>
+	                        </div>
+	                        <!-- <field name="location"/> -->
+                        	<field name="alarm_ids" widget="many2many_tags" options="{'no_create': True}"/>
+	                        <field name="employee_ids" widget="many2many_tags" options="{'no_create': True}"/>
+                        </group>
+                    </group>
+                    <notebook>
+                        <page string="Appointment Lines" name="appointment_lines">
+                            <field
+                                name="appointment_line"
+                                widget="section_and_note_one2many"
+                                mode="tree,kanban"
+                                attrs="{'readonly': [('state', 'in', ('done','cancel','paid'))]}"
+                            >
+                                <form>
+                                    <group>
+                                        <group>
+                                            <field name="product_id"
+                                                context="{'partner_id':parent.partner_id, 'quantity':1, 'company_id': parent.company_id}"
+                                                force_save="1"
+                                               />
+                                            <field name="untax_amt"/>
+                                            <field name="pos_untax_amt" invisible="1"/>
+                                            <field name="total_amt"/>
+                                            <field name="sequence" invisible="1"/>
+                                        </group>
+                                        <group>
+                                            <field name="tax_ids" widget="many2many_tags" options="{'no_create': True}" context="{'search_view_ref': 'account.account_tax_view_search'}" domain="[('type_tax_use','=','sale'),('company_id','=',parent.company_id)]"
+                                                />
+                                        </group>
+                                    </group>
+                                    <field name="state" invisible="1"/>
+                                </form>
+                                <!-- This is inherited below to make the order lines non-editable (inline)
+                                    for the members of some usability groups (packaging, event):
+                                    Indeed in those cases we need a dialog because there are additional fields to input.
+                                -->
+                                <tree
+                                    string="Appointment Lines"
+                                    editable="bottom"
+                                >
+                                    <control>
+                                        <create string="Add a product"/>
+                                        <!--<create string="Configure a product" context="{'open_product_configurator': True}" groups="product.group_product_variant"/>
+                                        <create string="Add a section" context="{'default_display_type': 'line_section'}"/>
+                                        <create string="Add a note" context="{'default_display_type': 'line_note'}"/>-->
+                                    </control>
+
+                                    <field name="sequence" widget="handle" />
+                                    <!-- We do not display the type because we don't want the user to be bothered with that information if he has no section or note. -->
+                                    <field
+                                        name="product_id"
+                                        force_save="1"
+                                        context="{
+                                            'partner_id': parent.partner_id,
+                                            'company_id': parent.company_id,
+                                        }"
+                                    />
+                                    <field name="name" widget="section_and_note_text"/>
+                                    <field name="untax_amt"/>
+                                    <field name="pos_untax_amt" invisible="1"/>
+                                    <field
+                                        name="tax_ids"
+                                        widget="many2many_tags"
+                                        options="{'no_create': True}"
+                                        domain="[('type_tax_use','=','sale'),('company_id','=',parent.company_id)]"
+
+                                    />
+                                    <field name="total_amt" widget="monetary"/>
+                                    <field name="state" invisible="1"/>
+                                    <field name="currency_id" invisible="1"/>
+
+                                </tree>
+                            </field>
+                            <group class="oe_subtotal_footer oe_right" colspan="2" name="sale_total">
+                                <field name="amount_untaxed" widget='monetary' options="{'currency_field': 'currency_id'}"/>
+                                <field name="amount_tax" widget='monetary' options="{'currency_field': 'currency_id'}"/>
+                                <div class="oe_subtotal_footer_separator oe_inline o_td_label">
+                                    <label for="amount_total" />
+                                </div>
+                                <field name="amount_total" nolabel="1" class="oe_subtotal_footer_separator" widget='monetary' options="{'currency_field': 'currency_id'}"/>
+                            </group>
+                            <!--<field name="note" class="oe_inline" placeholder="Terms and conditions... (note: you can setup default ones in the Configuration menu)"/>-->
+                            <div class="oe_clear"/>
+                        </page>
+                    </notebook>
+                </sheet>
+                <div class="oe_chatter">
+                    <field name="message_follower_ids" widget="mail_followers"/>
+                    <field name="activity_ids" widget="mail_activity"/>
+                    <field name="message_ids" widget="mail_thread"/>
+                </div>
+                </form>
+            </field>
+        </record>
+		
+        <record id="action_appointment" model="ir.actions.act_window">
+            <field name="name">POS Appointments</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">pos.appointments</field>
+            <!--<field name="view_type">form</field>-->
+            <field name="view_mode">calendar,tree,form</field>
+            <field name="view_id" ref="view_calendar_pos_appointments"/>
+            <field name="search_view_id" ref="view_calendar_pos_appointments_search"/>
+        </record>
+		
+        
+
+        <menuitem id="menu_appointment"
+            name="Appointment"
+            action="action_appointment"
+            parent="appointment_menu"
+            sequence="2" groups="point_of_sale.group_pos_user"/>
+		
+		
+		
+</odoo>

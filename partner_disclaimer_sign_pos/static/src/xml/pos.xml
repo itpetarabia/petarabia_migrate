@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templates id="template" xml:space="preserve">
+    <t t-name="ClientDetailsEdit" t-inherit="point_of_sale.ClientDetailsEdit" t-inherit-mode="extension" owl="1">
+        <xpath expr="//div[hasclass('client-details-left')]" position="inside">
+            <div class="client-detail">
+                <span class="label" style="width:auto;">Dsclmr. Sign</span>
+                <input type="checkbox" class="detail client-disclaimer_sign" name="disclaimer_sign" style="width:auto;margin-left:1%;"
+                               t-on-change="captureChange_disclaimer_sign"
+                                />
+                <span class="fa fa-download download-sign" t-on-click="downloadSign" style="margin-left:5%;cursor:pointer;"/>
+                <span  class="fa fa-trash-o o_clear_file_button delete-sign" t-on-click="deleteSign" style="margin-left:5%;cursor:pointer;"/>
+            </div>
+            <div class="client-detail div_disclaimer_sign_doc">
+                <span class="label">Sign Doc.</span>
+                <input type="file" class="detail client-disclaimer_sign_doc" name="disclaimer_sign_doc"
+                               t-on-change="uploadSignFile"
+                                />
+                <!--
+                <span class="fa fa-download download-sign" t-on-click="downloadSign"></span>
+                -->
+
+            </div>
+        </xpath>
+    </t>
+
+ </templates>

@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <template id="assets" inherit_id="point_of_sale.assets">
+        <xpath expr="." position="inside">
+            <link rel="stylesheet" type="text/scss" href="/mast_pos_cross_selling/static/src/scss/cross_product.scss"/>
+
+            <!--<script type="text/javascript" src="/mast_pos_cross_selling/static/src/js/CrossProduct.js"></script>-->
+            <!--<script type="text/javascript" src="/mast_pos_cross_selling/static/src/js/ProductItem.js"></script>-->
+            <script type="text/javascript" src="/mast_pos_cross_selling/static/src/js/pos.js"></script>
+            <script type="text/javascript" src="/mast_pos_cross_selling/static/src/js/Orderline.js"></script>
+        </xpath>
+    </template>
+
+</odoo>

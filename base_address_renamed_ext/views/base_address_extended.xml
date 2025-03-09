@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <record id="view_partner_structured_form_inherit" model="ir.ui.view">
+        <field name="name">view_partner_structured_form</field>
+        <field name="model">res.partner</field>
+        <field name="inherit_id" ref="base.view_partner_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='street2']" position="replace">
+                <label for="street2"/>
+                <field name="street2" placeholder="Street/Road ..." class="o_address_street" attrs="{'readonly': [('type', '=', 'contact'),('parent_id', '!=', False)]}"/>
+            </xpath>
+            <!-- <xpath expr="//field[@name='city']" position="replace">
+                <label for="city_id"/>
+                <field name="city_id" class="o_address_city" attrs="{'readonly': [('type', '=', 'contact'),('parent_id', '!=', False)]}" options='{"no_open": True}' context="{'country_id': country_id, 'default_country_id': country_id, 'zip': zip}"/>
+                <field name="city"  invisible="1" class="o_address_city" attrs="{'readonly': [('type', '=', 'contact'),('parent_id', '!=', False)]}" options='{"no_open": True}'/>
+            </xpath> -->
+            <xpath expr="//field[@name='zip']" position="replace">
+                <label for="zip"/>
+                <field name="zip" class="o_address_zip" attrs="{'readonly': [('type', '=', 'contact'),('parent_id', '!=', False)]}"/>
+            </xpath>
+            <!--
+            <xpath expr="//field[@name='state_id'}" position="replace">
+                <label for="state_id"/>
+                <field name="state_id" class="o_address_state" options='{"no_open": True}' attrs="{'readonly': [('type', '=', 'contact'),('parent_id', '!=', False)]}" context="{'country_id': country_id, 'zip': zip}"/>
+            </xpath>
+            -->
+            <!-- <xpath expr="//field[@name='child_ids']/form/sheet/group/group/div/div/field[@name='city']" position="replace">
+                <label for="city_id"/>
+                <field name="city" placeholder="Area" class="o_address_city" invisible="1"/>
+                <field name="city_id" placeholder="Area" class="o_address_city"/>
+            </xpath> -->
+            <xpath expr="//field[@name='child_ids']/form/sheet/group/group/div/div/field[@name='street2']" position="replace">
+                <label for="street2"/>
+                <field name="street2" placeholder="Street/Road ..." class="o_address_street"/>
+            </xpath>
+            <xpath expr="//field[@name='child_ids']/form/sheet/group/group/div/div/field[@name='zip']" position="replace">
+                <label for="zip"/>
+                <field name="zip" class="o_address_zip"/>
+            </xpath>
+            <!--
+            <xpath expr="//field[@name='child_ids']/form/sheet/group/group/div/div/field[@name='state_id']" position="replace">
+                <label for="state_id"/>
+                <field name="state_id" class="o_address_state" options='{"no_open": True}' context="{'country_id': country_id, 'zip': zip}"/>
+            </xpath>
+            -->
+            <xpath expr="//field[@name='child_ids']/form/sheet/group/group/div/div/field[@name='street']" position="replace">
+                <div>
+                    <field name="street" class="oe_read_only"/>
+                </div>
+                <field name="street_name" placeholder="Street Name..." attrs="{'readonly': [('type', '=', 'contact')]}" class="oe_edit_only"/>
+                <div class="oe_edit_only o_row">
+                    <label for="street_number"/>
+                    <span> </span>
+                    <field name="street_number" attrs="{'readonly': [('type', '=', 'contact')]}"/>
+                    <label for="street_number2"/>
+                    <field name="street_number2" attrs="{'readonly': [('type', '=', 'contact')]}"/>
+                </div>
+            </xpath>
+
+            <xpath expr="//field[@name='child_ids']" position="attributes">
+                <attribute name="context">{'default_type':'delivery','default_mobile':mobile, 'default_phone': phone, 'default_street_number2': street_number2,
+                'child_ids':child_ids,
+                 'default_street_number': street_number, 'default_street_name': street_name, 'default_email': email, 'default_website': website, 'default_function': function}</attribute>
+            </xpath>
+        </field>
+    </record>
+</odoo>

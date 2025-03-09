@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data noupdate="1">
+
+        <!-- Sequences for pos.appointments -->
+        <record id="seq_pos_appointment" model="ir.sequence">
+            <field name="name">POS Appointment</field>
+            <field name="code">pos.appointments</field>
+            <field name="prefix">PA</field>
+            <field name="padding">3</field>
+            <field name="company_id" eval="False"/>
+        </record>
+
+        <record id="seq_appointment_pos" model="ir.sequence">
+            <field name="name">Appointment POS</field>
+            <field name="code">appointment.pos.receipt</field>
+            <field name="prefix">A</field>
+            <field name="padding">3</field>
+            <field name="company_id" eval="False"/>
+        </record>
+
+
+    </data>
+</odoo>

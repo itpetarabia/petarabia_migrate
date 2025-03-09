@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data noupdate="0">
+        <record id="base.bh" model="res.country">
+            <field eval="'Street: %(street_name)s,
+                        Building: %(street_number)s, Flat: %(street_number2)s
+            			Road: %(street2)s, Area: %(city)s, Block, %(zip)s'" name="street_format" />
+        </record>
+
+    </data>
+</odoo>
