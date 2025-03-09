@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data noupdate="1">
+
+        <!-- Sequences for res.pet -->
+        <record id="seq_pet" model="ir.sequence">
+            <field name="name">Pet Sequence</field>
+            <!-- make sure this is unique, and by convention you can use the model's name -->
+            <field name="code">res.pet</field> 
+            <field name="prefix">PET</field>
+            <field name="padding">5</field>
+            <field name="company_id" eval="False"/>
+        </record>
+
+        <!-- Sequences for pet.type -->
+        <record id="seq_pet_type" model="ir.sequence">
+            <field name="name">Pet Types</field>
+            <field name="code">pet.type</field> 
+            <field name="prefix">T</field>
+            <field name="padding">2</field>
+            <field name="company_id" eval="False"/>
+        </record>
+
+    </data>
+</odoo>

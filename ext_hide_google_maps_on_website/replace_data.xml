@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <delete id="website.company_description_google_map" model="ir.ui.view"/>
+    <template id="company_description_hide_google_map" inherit_id="website.company_description">
+        <xpath expr="//address/t" position="replace">
+            <!-- Replace with nothing -->
+        </xpath>
+    </template>
+</odoo>

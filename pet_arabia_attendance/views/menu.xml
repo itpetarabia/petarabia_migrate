@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo> 
+
+    <menuitem id="menu_hr_attendance_manage_app"
+        name="App Management"
+        parent="hr_attendance.menu_hr_attendance_manage_attendances"
+        sequence="30"
+        groups="hr_attendance.group_hr_attendance_manager"/>
+
+    <menuitem id="menu_hr_attendance_appregistrations"
+        name="Registrations"
+        parent="menu_hr_attendance_manage_app"
+        sequence="10"
+        groups="hr_attendance.group_hr_attendance_manager"
+        action="action_attendance_appregistration"/>
+
+    <menuitem id="menu_hr_attendance_location"
+        name="Permitted Locations"
+        parent="menu_hr_attendance_manage_app"
+        sequence="20"
+        groups="hr_attendance.group_hr_attendance_manager"
+        action="action_hr_attendance_location"/>
+
+    <menuitem id="menu_hr_attendance_locationgroup"
+        name="Location Groups"
+        parent="menu_hr_attendance_manage_app"
+        sequence="30"
+        groups="hr_attendance.group_hr_attendance_manager"
+        action="action_hr_attendance_locationgroup"/>
+</odoo>

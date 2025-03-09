@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo> 
+        <menuitem id="menu_instashop" 
+        name="Instashop"
+        sequence="100"
+        web_icon="instashop,static/description/icon.png"
+        groups="base.group_system"
+        />
+
+        <menuitem
+        id="menu_pos_config_instashop"
+        name="Point of Sales"
+        parent="menu_instashop"
+        sequence="10"
+        action="action_pos_config_instashop"
+        groups="base.group_system"
+        />
+
+        <menuitem
+        id="menu_instashop_config"
+        name="Configuration"
+        parent="menu_instashop"
+        sequence="20"
+        action="action_instashop_api_config"
+        groups="base.group_system"
+        />
+</odoo>

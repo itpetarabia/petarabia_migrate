@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo> 
+    <!-- Search View -->
+    <record id="view_hr_attendance_locationgroup_search" model="ir.ui.view">
+        <field name="name">Attendance Location Group Search</field>
+        <field name="model">hr.attendance.locationgroup</field>
+        <field name="arch" type="xml">
+            <search string="Location Groups">
+                <field name="name"/>
+                <field name="locations"/>
+            </search>
+        </field>
+    </record>
+
+    <!-- List/Tree View -->
+    <record id="view_hr_attendance_locationgroup_tree" model="ir.ui.view">
+            <field name="name">Attendance Location Group List</field>
+            <field name="model">hr.attendance.locationgroup</field>
+            <field name="arch" type="xml">
+                <tree sample="1">
+                    <field name="name"/>
+                    <field name="locations" widget="many2many_tags"/>
+                </tree>
+            </field>
+    </record>
+
+    <!-- Form View -->
+    <record id="view_hr_attendance_locationgroup_form" model="ir.ui.view">
+            <field name="name">Attendance Location Group Form</field>
+            <field name="model">hr.attendance.locationgroup</field>
+            <field name="arch" type="xml">
+                <form>
+                    <sheet>
+                        <div class="oe_title">
+                            <h1>
+                                <field name="name"/>
+                            </h1>
+                        </div>
+                        <group>
+                            <field name="locations" widget="many2many_tags" options="{'no_create_edit': True, 'no_quick_create': True}"/>
+                        </group>
+                    </sheet>
+                <!-- Chatter Section -->
+                <div class="oe_chatter">
+                    <field name="message_follower_ids"/>
+                    <field name="activity_ids"/>
+                    <field name="message_ids"/>
+                </div>
+                </form>
+            </field>
+    </record>
+    <!-- Window Action -->
+    <record id="action_hr_attendance_locationgroup" model="ir.actions.act_window">
+        <field name="name">Attendance Location Groups</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="res_model">hr.attendance.locationgroup</field>
+        <field name="view_mode">tree,form</field>
+        <field name="context">{}</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Create a new location group!
+            </p>
+        </field>
+    </record>
+</odoo>

@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo> 
+    <!-- Inherited Form View -->
+    <!-- Add a page to the customer view for adding/modifying/deleting pets -->
+    <record id="view_customerpet_form_inherit" model="ir.ui.view">
+        <field name="name">res.partner.pet.form</field>
+        <field name="model">res.partner</field>
+        <field name="inherit_id" ref="base.view_partner_form"></field>
+        <field name="arch" type="xml">
+            <xpath expr="//page[@name='contact_addresses']" position='before'>
+                <page string="Pets" name="pets" autofocus="autofocus">
+                    <field name="pet_ids" mode="kanban" context="{'default_parent_id': active_id }">
+                        <kanban>
+                            <field name="id"/>
+                            <field name="name"/>
+                            <field name="type_id"/>
+                            <field name="breed"/>
+                            <field name="parent_id"/>
+                            <field name="dob"/>
+                            <field name="gender"/>
+                            <!-- <field name="image_128"/> -->
+                            <field name="note"/>
+                            <templates>
+                                <t t-name="kanban-box">
+                                    <div class="oe_kanban_global_click">
+                                        <div class="o_kanban_image">
+                                            <img alt="Avatar" t-att-src="_s + &quot;/base/static/img/avatar_grey.png&quot;"/>
+                                        </div>
+                                        <div class="oe_kanban_details">
+                                            <strong>
+                                                <field name="name"/>
+                                            </strong> 
+                                            <div><field name="type_id" options="{&quot;no_open&quot;: True, &quot;no_create&quot;: True}"/></div>
+                                            <div><field name="gender"/></div>
+                                            <div><field name="breed"/></div>
+                                        </div>
+                                    </div>
+                                </t>
+                            </templates>
+                        </kanban>
+                        <form string="Pets">
+                            <sheet>
+                                <field name="parent_id" invisible="1"/>
+                                <hr/>
+                                <group col="12">
+                                    <group colspan="5">
+                                        <field name="name" string="Pet Name"/>
+                                        <field name="gender" string="Gender"/>
+                                        <field name="type_id" options="{&quot;no_open&quot;: True, &quot;no_create&quot;: True}" string="Type"/>
+                                        <field name="size"/>
+                                        <field name="breed" string="Breed"/>
+                                    </group>
+                                    <group colspan="5">
+                                        <field name="dob" string="DoB"/>
+                                        <field name='color_id'/>
+                                        <field name='behavior'/>
+                                        <field name='issues'/>
+                                        <field name="note" string="Notes"/>
+                                    </group>
+                                </group>
+                            </sheet>
+                        </form>
+                    </field>
+                </page>
+            </xpath>
+        </field>
+    </record>
+
+   <!-- Inherit Search View to search pets  -->
+    <record id="view_customerpet_search_inherit" model="ir.ui.view">
+        <field name="name">res.partner.pet.search</field>
+        <field name="model">res.partner</field>
+        <field name="inherit_id" ref="base.view_res_partner_filter"></field>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='user_id']" position='after'>
+                <field name="pet_ids"/>
+            </xpath>
+        </field>
+    </record>
+
+    <!-- Inherited Order List -->
+    <record id="view_customerpet_tree_inherit" model="ir.ui.view">
+        <field name="name">res.partner.pet.tree</field>
+        <field name="model">res.partner</field>
+        <field name="inherit_id" ref="base.view_partner_tree"></field>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='display_name']" position='after'>
+                <!-- <field name="pet_ids" widget="many2many_tags" options="{'color_field': 'color'}" placeholder="Not assigned."/> -->
+                <field name="pet_ids" widget="many2many_tags"/>
+            </xpath>
+        </field>
+    </record>
+
+</odoo>

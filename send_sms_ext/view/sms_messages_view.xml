@@ -1,0 +1,147 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data>
+
+    <record id="view_sms_messages_gateway_tree" model="ir.ui.view">
+        <field name="name">sms.messages.gateway.tree</field>
+        <field name="model">sms.messages.gateway</field>
+        <field name="arch" type="xml">
+            <tree string="Messages">
+                <field name="name" />
+                <field name="message" />
+                <field name="sms_type" />
+                <field name="date"/>
+                <field name="state"/>
+                <field name="company_id" groups="base.group_multi_company"/>
+            </tree>
+        </field>
+    </record>
+
+    <record id="view_sms_messages_gateway_form" model="ir.ui.view">
+        <field name="name">sms.messages.gateway.form</field>
+        <field name="model">sms.messages.gateway</field>
+        <field name="arch" type="xml">
+            <form string="Message">
+               <header>
+                   <button name="sms_confirm" type="object" states="draft" string="Confirm Message" class="oe_highlight"/>
+                   <button name="sms_cancel" type="object" states="draft,confirm" string="Cancel Message"/>
+                   <button name="sms_draft" type="object" states="cancel" string="Set to Draft"/>
+                   <field name="state" widget="statusbar" statusbar_visible="draft,confirm"/>
+               </header>
+               <sheet string="Message">
+                    <group>
+                        <field name="sms_type" attrs="{'readonly': [('state', 'in', ('done', 'cancel','confirm'))]}"/>
+                        <field name="name" attrs="{'readonly': [('state', 'in', ('done', 'cancel','confirm'))]}"/>
+                        <!-- <field name="partner_ids" widget="many2many_tags" attrs="{'readonly':[('receivers','=','all')]}" /> -->
+                        <field name="message" attrs="{'readonly': [('state', 'in', ('done', 'cancel','confirm'))]}"/>
+                        <field name="date" attrs="{'readonly': [('state', 'in', ('done', 'cancel','confirm'))]}"/>
+                        <field name="company_id" groups="base.group_multi_company" attrs="{'readonly': [('state', 'in', ('done', 'cancel','confirm'))]}"/>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+
+
+         <record id="action_sms_messages_gateway_tree" model="ir.actions.act_window">
+            <field name="name">SMS Templates</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">sms.messages.gateway</field>
+            <!--<field name="view_type">form</field>-->
+            <field name="view_mode">tree,form</field>
+            <field name="help" type="html">
+              <p class="oe_view_nocontent_create">
+                Click to create a sms message. 
+              </p>
+            </field>
+        </record>
+
+        <menuitem action="action_sms_messages_gateway_tree" id="menu_sms_message_gateway" groups="base.group_user" name="SMS Gateway" sequence="36" web_icon="send_sms_ext,static/description/icon.png"/>
+        
+        <record id="view_sms_gateway_config" model="ir.ui.view">
+            <field name="name">sms settings</field>
+            <field name="model">res.config.settings</field>
+			<field name="priority" eval="10"/>
+        <field name="inherit_id" ref="base.res_config_settings_view_form" />
+            <field name="arch" type="xml">
+			<xpath expr="//div[hasclass('settings')]" position="inside">
+			    <div class="app_settings_block" data-string="SMS Gateway" string="SMS Gateway" data-key="send_sms_ext" groups="base.group_system">
+            		<!-- 
+                    <div id="main">
+                    	<group string="SMS">
+                        	<field name="username" class="oe_inline"/>
+                        	<field name="password" class="oe_inline"/>
+                        	<field name="gateway" class="oe_inline"/>
+                    	</group>
+                	</div>
+                	 -->
+                	<h2>SMS Gateway</h2>
+                    <div class="row mt16 o_settings_container">
+                        <div class="col-12 col-lg-6 o_setting_box">
+                            <div class="o_setting_left_pane"/>
+                            <div class="o_setting_right_pane">
+                                <span class="o_form_label">SMS</span>
+                                <div class="text-muted">
+                                    To send an SMS: fill Username, Password, Gateway &amp; API Token
+                                </div>
+                                <div class="content-group">
+                                        <div class="row mt16">
+                                            <label string="Username" for="sms_username" class="col-lg-3 o_light_label"/>
+                                            <field name="sms_username" class="oe_inline"/>
+                                        </div>
+                                </div>
+                                <div class="content-group">
+                                        <div class="row mt16">
+                                            <label string="Password" for="sms_password" class="col-lg-3 o_light_label"/>
+                                            <field name="sms_password" class="oe_inline"/>
+                                        </div>
+                                </div>
+                                <div class="content-group">
+                                        <div class="row mt16">
+                                            <label string="Gateway" for="sms_gateway" class="col-lg-3 o_light_label"/>
+                                            <field name="sms_gateway" class="oe_inline"/>
+                                        </div>
+                                </div>
+                                <div class="content-group">
+                                        <div class="row mt16">
+                                            <label string="API Token" for="sms_api_token" class="col-lg-3 o_light_label"/>
+                                            <field name="sms_api_token" class="oe_inline"/>
+                                        </div>
+                                </div>
+                                
+                            </div>
+                                
+                        </div>
+                    </div>
+                </div>
+            </xpath>
+            </field>
+        </record>
+        
+        <record id="action_sms_gateway_config" model="ir.actions.act_window">
+            <field name="name">Settings</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">res.config.settings</field>
+            <field name="view_id" ref="view_sms_gateway_config"/>
+            <field name="view_mode">form</field>
+            <field name="target">inline</field>
+			<field name="context">{'module' : 'send_sms_ext'}</field>
+        </record>
+
+        <menuitem id="menu_sms_gateway_config" name="Configuration" parent="menu_sms_message_gateway" sequence="100" groups="base.group_system" action="send_sms_ext.action_sms_gateway_config"/>
+		<!-- 
+    	<record forcecreate="True" id="ir_cron_scheduler_sms" model="ir.cron">
+            <field name="name">Send SMS</field>
+            <field eval="True" name="active" />
+            <field name="interval_number">1</field>
+            <field name="interval_type">minutes</field>
+            <field name="numbercall">-1</field>
+            <field eval="False" name="doall" />
+            <field eval="'sms.messages'" name="model" />
+            <field eval="'send_sms'" name="function" />
+            <field eval="'()'" name="args" />
+        </record>
+    	 -->
+    </data>
+</openerp>

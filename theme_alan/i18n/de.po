@@ -1,0 +1,113 @@
+# Translation of Odoo Server.
+# This file contains the translation of the following modules:
+# 	* theme_alan
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Odoo Server 14.0\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2022-01-05 13:06+0000\n"
+"PO-Revision-Date: 2022-01-05 13:06+0000\n"
+"Last-Translator: \n"
+"Language-Team: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: \n"
+"Plural-Forms: \n"
+
+#. module: theme_alan
+#. openerp-web
+#: code:addons/theme_alan/static/src/xml/alan_snippet_temp/category.xml:0
+#: code:addons/theme_alan/static/src/xml/alan_snippet_temp/category.xml:0
+#: code:addons/theme_alan/static/src/xml/alan_snippet_temp/category.xml:0
+#: code:addons/theme_alan/static/src/xml/alan_snippet_temp/category.xml:0
+#: code:addons/theme_alan/static/src/xml/alan_snippet_temp/homepage.xml:0
+#: code:addons/theme_alan/static/src/xml/alan_snippet_temp/homepage.xml:0
+#: code:addons/theme_alan/static/src/xml/alan_snippet_temp/homepage.xml:0
+#: code:addons/theme_alan/static/src/xml/alan_snippet_temp/homepage.xml:0
+#, python-format
+msgid "#top Collections"
+msgstr ""
+
+#. module: theme_alan
+#: model_terms:theme.ir.ui.view,arch:theme_alan.json_login_template
+msgid "Email"
+msgstr "Email"
+
+#. module: theme_alan
+#: model_terms:theme.ir.ui.view,arch:theme_alan.json_login_template
+msgid "Reset Password"
+msgstr "Passwort zurücksetzen"
+
+#. module: theme_alan
+#: model_terms:theme.ir.ui.view,arch:theme_alan.json_login_template
+msgid "Log in"
+msgstr "Anmeldung"
+
+#. module: theme_alan
+#: model_terms:theme.ir.ui.view,arch:theme_alan.json_login_template
+#: model_terms:theme.ir.ui.view,arch:theme_alan.json_register_template
+msgid "Password"
+msgstr "Passwort"
+
+#. module: theme_alan
+#: model_terms:theme.ir.ui.view,arch:theme_alan.json_register_template
+msgid ""
+"<span class=\"btn btn-link btn-sm haveAccount\">Already have an "
+"account?</span>"
+msgstr ""
+"<span class=\"btn btn-link btn-sm haveAccount\">Sie haben bereits "
+"ein Konto?</span>"
+
+#. module: theme_alan
+#: model_terms:theme.ir.ui.view,arch:theme_alan.json_register_template
+msgid "Confirm Password"
+msgstr "Kennwort bestätigen"
+
+#. module: theme_alan
+#: model_terms:theme.ir.ui.view,arch:theme_alan.json_register_template
+msgid "Sign up"
+msgstr "Anmelden"
+
+#. module: theme_alan
+#: model_terms:theme.ir.ui.view,arch:theme_alan.json_register_template
+#: model_terms:theme.ir.ui.view,arch:theme_alan.json_reset_template
+msgid "Your Email"
+msgstr "Deine E-Mail"
+
+#. module: theme_alan
+#: model_terms:theme.ir.ui.view,arch:theme_alan.json_register_template
+msgid "Your Name"
+msgstr "Dein Name"
+
+#. module: theme_alan
+#: model_terms:theme.ir.ui.view,arch:theme_alan.json_register_template
+msgid "e.g. John Doe"
+msgstr "e.g. John Doe"
+
+#. module: theme_alan
+#: model_terms:theme.ir.ui.view,arch:theme_alan.json_reset_template
+msgid "Confirm"
+msgstr "Bestätigen Sie"
+
+#. module: theme_alan
+#: model_terms:theme.ir.ui.view,arch:theme_alan.json_reset_template
+msgid "<span class=\"haveAccount\" style=\"cursor:pointer\">Back to Login</span>"
+msgstr "<span class=\"haveAccount\" style=\"cursor:pointer\">Zurück zur Anmeldung</span>"
+
+
+#. module: theme_alan
+#: model_terms:theme.ir.ui.view,arch:theme_alan.login_pop_template
+msgid "Login"
+msgstr "Anmeldung"
+
+#. module: theme_alan
+#: model_terms:theme.ir.ui.view,arch:theme_alan.login_pop_template
+msgid "Reset"
+msgstr "Zurücksetzen"
+
+#. module: theme_alan
+#: model_terms:theme.ir.ui.view,arch:theme_alan.header_layout_9
+#: model_terms:theme.ir.ui.view,arch:theme_alan.login_pop_template
+msgid "Register"
+msgstr "Registrieren"

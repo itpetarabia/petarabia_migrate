@@ -1,0 +1,118 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo> 
+
+    <!-- Search View -->
+    <record id="view_pet_search" model="ir.ui.view">
+        <field name="name">res.pet.search</field>
+        <field name="model">res.pet</field>
+        <field name="arch" type="xml">
+            <search string="Pets">
+                <field name="name"/>
+                <field name="type_id"/>
+                <field name="dob"/>
+                <field name="gender"/>
+                <field name="parent_id"/>
+                <field name="breed"/>
+                <separator/>
+                <filter name='dead' string="Dead" domain="[('active', '=', False), ('state', '=', 'dead')]"/>
+                <filter name="male" string="Male" domain="[('gender', '=', 'male')]"/>
+                <filter name='female' string="Female" domain="[('gender', '=', 'female')]"/>
+                <group expand="1" string="Group By">
+                    <!-- Convention for `name` = groupby_{field name} -->
+                    <filter name="groupby_type_id" string="Type" context="{'group_by':'type_id'}"/>
+                    <filter name="groupby_breed" string="Breed" context="{'group_by':'breed'}"/>
+                    <filter name="groupby_gender" string="Gender" context="{'group_by':'gender'}"/>
+                    <filter name="groupby_parent" string="Parent" context="{'group_by':'parent_id'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <!-- List/Tree View -->
+    <record id="view_pet_tree" model="ir.ui.view">
+            <field name="name">res.pet.tree</field>
+            <field name="model">res.pet</field>
+            <field name="arch" type="xml">
+                <tree multi_edit="1">
+                    <field name='reference'></field>
+                    <field name='name'></field>
+                    <field name='type_id'></field>
+                    <field name='breed'></field>
+                    <field name='gender'></field>
+                    <field name='parent_id'></field>
+                </tree>
+            </field>
+    </record>
+
+    <!-- Form View -->
+    <record id="view_pet_form" model="ir.ui.view">
+            <field name="name">res.pet.form</field>
+            <field name="model">res.pet</field>
+            <field name="arch" type="xml">
+                <form>
+                    <header>
+                        <button id="button_dead" name="action_dead" string="Mark as Dead" class="btn-danger"
+                            type="object" states="alive" confirm="This action cannot be reversed! Are you sure you want to confirm?"/>
+                        <field name="state" invisible="1"/>
+                    </header>
+                    <sheet>
+                        <!-- Danger Ribbon -->
+                        <widget name="web_ribbon" title="Archived" bg_color="bg-warning"
+                            attrs="{'invisible': [('active', '=', True)]}"/>
+                        <widget name="web_ribbon" title="Dead" bg_color="bg-danger"
+                            attrs="{'invisible': [('state', '=', 'alive')]}"/>
+
+                        <!-- Sequence Number (readonly) On Top-->
+                        <div class="oe_title">
+                            <h1>
+                                <field name="reference" readonly="1"/>
+                            </h1>
+                        </div>
+                        <group>
+                            <group>
+                                <field name='name'></field>
+                                <field name='type_id' options="{&quot;no_open&quot;: True, &quot;no_create&quot;: True}"></field>
+                                <field name='parent_id'></field>
+                                <field name='gender'></field>
+                                <field name='dob'></field>
+                                <field name='size'/>
+                                <field name='breed'></field>
+                            </group>
+                            <group>
+                                <field name='color_id'/>
+                                <field name='behavior'/>
+                                <field name='issues'/>
+                                <field name='note'></field>
+                                <field name='active' invisible="1"/>
+                            </group>
+                        </group>
+                    </sheet>
+                <!-- Chatter Section -->
+                <div class="oe_chatter">
+                    <field name="message_follower_ids"/>
+                    <field name="activity_ids"/>
+                    <field name="message_ids"/>
+                </div>
+                </form>
+            </field>
+    </record>
+
+    <!-- Window Action -->
+    <record id="action_pet" model="ir.actions.act_window">
+        <field name="name">Pets</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="res_model">res.pet</field>
+        <field name="view_mode">tree,form</field>
+        <!-- Convention : search_default_{name of groupbys in search view} -->
+        <!-- <field name="context">{'search_default_groupby_responsible': 1, 'search_default_confirm': 1}</field> -->
+        <field name="context">{}</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Add a pet!
+            </p>
+        </field>
+    </record>
+
+    <!-- Menus have been moved to a different file -->
+
+</odoo>

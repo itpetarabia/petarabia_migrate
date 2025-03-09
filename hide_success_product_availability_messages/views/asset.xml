@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <template id="assets_frontend_hide_msgs" inherit_id="website.assets_frontend" name="Website Sale Stock (Hide Success Stock Messages)">
+        <xpath expr="script[last()]" position="after">
+            <script type="text/javascript" src="/hide_success_product_availability_messages/static/src/js/variant_mixin.js" />
+        </xpath>
+    </template>
+</odoo>

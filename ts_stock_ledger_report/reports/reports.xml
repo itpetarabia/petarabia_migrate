@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+
+    <report
+            id="action_stock_ledger_xlsx_report"
+            model="ts.stock.ledger.report"
+            string="Stock Ledger Report"
+            report_type="xlsx"
+            name="ts_stock_ledger_report.stock_ledger_xlsx_report"
+            file="stock_ledger_xlsx_report"
+            attachment_use="False"
+    />
+
+</odoo>

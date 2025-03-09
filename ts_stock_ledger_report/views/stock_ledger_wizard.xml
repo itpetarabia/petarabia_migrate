@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+
+    <record model="ir.ui.view" id="stock_ledger_report_form_view">
+        <field name="name">stock.ledger.report.form.view</field>
+        <field name="model">ts.stock.ledger.report</field>
+        <field name="arch" type="xml">
+            <form string="Stock Ledger">
+                <group>
+                    <group>
+                        <!-- <field name="w"/> -->
+                        <field name="date_to" string= "Till Date"/>
+                    </group>
+                    <group>
+                        <field name="warehouse_ids" widget="many2many_tags" />
+                    </group>
+                </group>
+                <footer>
+                    <button string="Generate Excel" name="action_generate_xlsx_report" type="object" class="btn-primary"/>
+                    <button string="Cancel" class="btn-secondary" special="cancel"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_stock_ledger_wizard" model="ir.actions.act_window">
+        <field name="name">Stock ledger report</field>
+        <field name="res_model">ts.stock.ledger.report</field>
+        <field name="view_mode">form</field>
+        <field name="target">new</field>
+    </record>
+
+    <menuitem id="stock_ledger_report_menu"
+              name="Stock ledger report"
+              sequence="3"
+              action="action_stock_ledger_wizard"
+              parent="point_of_sale.menu_point_rep"/>
+
+</odoo>

@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo> 
+
+    <!-- Link to Point of Sale Menu -->
+    <menuitem id="menu_pet_root"
+        name="Pets"
+        parent="point_of_sale.menu_point_root"
+        sequence="45"/>
+
+    <menuitem id="menu_petdetails_root"
+        name="Our Pets"
+        parent="menu_pet_root"
+        sequence="10"
+        action="action_pet"/>
+
+    <menuitem id="menu_pet_types"
+        name="Types"
+        parent="menu_pet_root"
+        sequence="20"
+        action="action_pet_type"/>
+
+</odoo>

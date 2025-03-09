@@ -1,0 +1,4 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_hr_attendance_appregistration,access.hr.attendance.appregistration,model_hr_attendance_appregistration,hr_attendance.group_hr_attendance_manager,1,1,1,1
+access_hr_attendance_location,access.hr.attendance.location,model_hr_attendance_location,hr_attendance.group_hr_attendance_manager,1,1,1,1
+access_hr_attendance_locationgroup,access.hr.attendance.locationgroup,model_hr_attendance_locationgroup,hr_attendance.group_hr_attendance_manager,1,1,1,1

@@ -1,0 +1,5 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_res_pet,access.res.pet,model_res_pet,,1,1,1,1
+access_pet_type,access.pet.type,model_pet_type,,1,1,1,1
+access_pet_color_view,access.pet.color.view,model_pet_color,base.group_erp_manager,1,1,1,1
+access_pet_color_edit,access.pet.color.edit,model_pet_color,base.group_user,1,0,0,0

@@ -1,0 +1,29 @@
+send sms
+========
+
+sms gateway:
+-----------
+Username:mastbahrain
+Password:Kpl12345
+Gateway:https://xrded3.api.infobip.com/sms/1/text/query
+
+stock picking
+-------------
+sms for: Delivery Note
+
+body: 
+Dear {NAME},
+
+This is to notify you that your special order has arrived. Please contact our branch: {BRANCH}
+
+calender appointment
+--------------------
+sms for: Appointment
+
+body: 
+Dear {NAME},
+
+This is a reminder that you have an appointment with Pet Arabia.
+Date/Time: {DATE}
+Branch: {BRANCH}
+Premium Grooming Service.

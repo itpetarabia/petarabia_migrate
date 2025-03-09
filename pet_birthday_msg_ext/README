@@ -1,0 +1,7 @@
+# Description
+Automated birthday SMS messages (scheduler) sent to customers wishing their pets a very happy birthday. It used the `dob` field in the pet record to read their birth dates.
+
+# Steps
+1. Install the module
+2. Go to Settings -> Technical -> Scheduled Actions -> `SMS : Daily Birthday Messages`
+3. Adjust the time for when the messages should be sent, and then activate it!

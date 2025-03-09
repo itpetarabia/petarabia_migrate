@@ -1,0 +1,22 @@
+/* Mobile two column
+----------------------------------*/
+@include down-md {
+	#products_grid {
+		&:not(.o_wsale_layout_list) {
+			.o_wsale_products_grid_table_wrapper {
+				tr {
+					display: flex;
+					flex-wrap: wrap;
+				}
+				td.oe_product {
+					margin: 0;
+					max-width: 50%;
+					flex: 0 0 50%;
+					> .o_wsale_product_grid_wrapper {
+						width: 100%;
+					}
+				}
+			}
+		}
+	}
+}

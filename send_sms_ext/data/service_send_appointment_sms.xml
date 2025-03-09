@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Scheduler for Event Alarm-->
+    <record id="ir_cron_appintment_sms" model="ir.cron">
+        <field name="name">Appointment SMS</field>
+        <!--<field name="interval_number">1</field>
+        <field name="interval_type">days</field>-->
+        <field name="interval_number">5</field>
+        <field name="interval_type">minutes</field>
+        <field name="numbercall">-1</field>
+        <field name="doall" eval="False"/>
+        <field name="model_id" ref="model_calendar_event"/>
+        <field name="code">model._run_appointment_sms()</field>
+        <field name="state">code</field>
+    </record>
+
+    <!-- Scheduler for Backup Event Alarm-->
+    <record id="ir_cron_backup_appintment_sms" model="ir.cron">
+        <field name="name">Appointment SMS (Without Alarms)</field>
+        <field name="interval_number">1</field>
+        <field name="interval_type">days</field>
+        <field name="numbercall">-1</field>
+        <field name="doall" eval="False"/>
+        <field name="model_id" ref="model_calendar_event"/>
+        <field name="code">model._backup_run_appointment_sms()</field>
+        <field name="state">code</field>
+    </record>
+
+    
+</odoo>

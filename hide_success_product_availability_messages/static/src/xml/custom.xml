@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<templates>
+
+    <!-- Inherited from website_sale.product_availability -->
+    <t t-name="hide_success_product_availability_messages.hide_msgs">
+        <!-- Comment all successfull messages -->
+        <t t-if="product_type == 'product' and _.contains(['always', 'threshold'], inventory_availability)">
+            <div t-if="cart_qty" t-attf-class="availability_message_#{product_template} text-warning mt8">
+                You already added <t t-if="!virtual_available">all</t> <t t-esc="cart_qty" /> <t t-esc="uom_name" /> in your cart.
+            </div>
+            <div t-if="!cart_qty and virtual_available lte 0" t-attf-class="availability_message_#{product_template} text-danger mt16"><i class="fa fa-exclamation-triangle" role="img" aria-label="Warning" title="Warning"/> Temporarily out of stock</div>
+        </t>
+        <div t-if="product_type == 'product' and inventory_availability == 'custom'" t-attf-class="availability_message_#{product_template} text-success mt16">
+            <t t-esc="custom_message" />
+        </div>
+    </t>
+
+</templates>

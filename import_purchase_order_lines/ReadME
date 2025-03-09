@@ -1,0 +1,8 @@
+1) Version: 14.0.0.1 | Date : 16/10/2020
+- Fixed the issue, when take product in excel sheet with multiple variants.
+
+14.0.0.2 ==> Added uom as a Purchase Unit of Measure for Take Details From The Product option.
+
+=> 14.0.0.3 : Add French, Spanish , Arabic and Dutch translation in module also improved an index.
+
+=> 14.0.0.4 (19-4-2022) : Added import sample file download functionality.

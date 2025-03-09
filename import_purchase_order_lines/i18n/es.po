@@ -1,0 +1,170 @@
+# Translation of Odoo Server.
+# This file contains the translation of the following modules:
+# 	* import_purchase_order_lines
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Odoo Server 13.0\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2021-07-23 07:04+0000\n"
+"PO-Revision-Date: 2021-07-23 07:04+0000\n"
+"Last-Translator: \n"
+"Language-Team: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: \n"
+"Plural-Forms: \n"
+
+#. module: import_purchase_order_lines
+#: code:addons/import_purchase_order_lines/import_po_lines.py:0
+#: code:addons/import_purchase_order_lines/import_po_lines.py:0
+#: code:addons/import_purchase_order_lines/import_po_lines.py:0
+#, python-format
+msgid "\"%s\" Tax not in your system"
+msgstr "\"%s\" Impuestos no en su sistema"
+
+#. module: import_purchase_order_lines
+#: code:addons/import_purchase_order_lines/import_po_lines.py:0
+#: code:addons/import_purchase_order_lines/import_po_lines.py:0
+#, python-format
+msgid ""
+"%s product is not found\" .\n"
+" If you want to create product then first select Import Product By Name option ."
+msgstr ""
+
+#. module: import_purchase_order_lines
+#: code:addons/import_purchase_order_lines/import_po_lines.py:0
+#, python-format
+msgid "%s product is not found\"."
+msgstr "%s no se encuentra el producto\"."
+
+#. module: import_purchase_order_lines
+#: model:ir.model.fields.selection,name:import_purchase_order_lines.selection__import_po_line_wizard__import_prod_option__barcode
+msgid "Barcode"
+msgstr "Código de barras"
+
+#. module: import_purchase_order_lines
+#: model:ir.model.fields.selection,name:import_purchase_order_lines.selection__import_po_line_wizard__import_option__csv
+msgid "CSV File"
+msgstr "Archivo CSV"
+
+#. module: import_purchase_order_lines
+#: model:ir.model.fields.selection,name:import_purchase_order_lines.selection__import_po_line_wizard__import_prod_option__code
+msgid "Code"
+msgstr "Código"
+
+#. module: import_purchase_order_lines
+#: model:ir.model.fields,field_description:import_purchase_order_lines.field_import_po_line_wizard__create_uid
+msgid "Created by"
+msgstr "Creado por"
+
+#. module: import_purchase_order_lines
+#: model:ir.model.fields,field_description:import_purchase_order_lines.field_import_po_line_wizard__create_date
+msgid "Created on"
+msgstr "Creado en"
+
+#. module: import_purchase_order_lines
+#: model:ir.model.fields,field_description:import_purchase_order_lines.field_import_po_line_wizard__display_name
+msgid "Display Name"
+msgstr "Nombre para mostrar"
+
+#. module: import_purchase_order_lines
+#: model:ir.model.fields,field_description:import_purchase_order_lines.field_import_po_line_wizard__id
+msgid "ID"
+msgstr "IDENTIFICACIÓN"
+
+#. module: import_purchase_order_lines
+#: model_terms:ir.ui.view,arch_db:import_purchase_order_lines.po_order_wizard_view
+msgid "Import"
+msgstr "Importar"
+
+#. module: import_purchase_order_lines
+#: model:ir.model.fields,field_description:import_purchase_order_lines.field_import_po_line_wizard__import_prod_option
+msgid "Import Product By "
+msgstr "Importar producto por"
+
+#. module: import_purchase_order_lines
+#: model:ir.actions.act_window,name:import_purchase_order_lines.import_po_line_action
+#: model_terms:ir.ui.view,arch_db:import_purchase_order_lines.purchase_order_inherited_view
+msgid "Import Purchase Order Lines"
+msgstr "Importar líneas de orden de compra"
+
+#. module: import_purchase_order_lines
+#: code:addons/import_purchase_order_lines/import_po_lines.py:0
+#, python-format
+msgid "Invalid file!"
+msgstr "¡Archivo inválido!"
+
+#. module: import_purchase_order_lines
+#: model:ir.model.fields,field_description:import_purchase_order_lines.field_import_po_line_wizard____last_update
+msgid "Last Modified on"
+msgstr "Última modificación el"
+
+#. module: import_purchase_order_lines
+#: model:ir.model.fields,field_description:import_purchase_order_lines.field_import_po_line_wizard__write_uid
+msgid "Last Updated by"
+msgstr "Última actualización por"
+
+#. module: import_purchase_order_lines
+#: model:ir.model.fields,field_description:import_purchase_order_lines.field_import_po_line_wizard__write_date
+msgid "Last Updated on"
+msgstr "Ultima actualización en"
+
+#. module: import_purchase_order_lines
+#: model:ir.model.fields.selection,name:import_purchase_order_lines.selection__import_po_line_wizard__import_prod_option__name
+msgid "Name"
+msgstr "Nombre"
+
+#. module: import_purchase_order_lines
+#: model:ir.model.fields,field_description:import_purchase_order_lines.field_import_po_line_wizard__product_details_option
+msgid "Product Details Option"
+msgstr "Opción de detalles del producto"
+
+#. module: import_purchase_order_lines
+#: model:ir.model.fields,field_description:import_purchase_order_lines.field_import_po_line_wizard__import_option
+msgid "Select"
+msgstr "Seleccione"
+
+#. module: import_purchase_order_lines
+#: model:ir.model.fields,field_description:import_purchase_order_lines.field_import_po_line_wizard__purchase_order_file
+msgid "Select File"
+msgstr "Seleccione Archivo"
+
+#. module: import_purchase_order_lines
+#: model:ir.model.fields.selection,name:import_purchase_order_lines.selection__import_po_line_wizard__product_details_option__from_product
+msgid "Take Details From The Product"
+msgstr "Obtener detalles del producto"
+
+#. module: import_purchase_order_lines
+#: model:ir.model.fields.selection,name:import_purchase_order_lines.selection__import_po_line_wizard__product_details_option__from_xls
+msgid "Take Details From The XLS/CSV File"
+msgstr "Obtener detalles del archivo XLS / CSV"
+
+#. module: import_purchase_order_lines
+#: model:ir.model.fields.selection,name:import_purchase_order_lines.selection__import_po_line_wizard__product_details_option__from_pricelist
+msgid "Take Details With Adapted Pricelist"
+msgstr "Obtenga detalles con la lista de precios adaptada"
+
+#. module: import_purchase_order_lines
+#: code:addons/import_purchase_order_lines/import_po_lines.py:0
+#, python-format
+msgid "UOM \"%s\" is Not Available"
+msgstr "UOM \"%s\" no está disponible"
+
+#. module: import_purchase_order_lines
+#: code:addons/import_purchase_order_lines/import_po_lines.py:0
+#: code:addons/import_purchase_order_lines/import_po_lines.py:0
+#: code:addons/import_purchase_order_lines/import_po_lines.py:0
+#, python-format
+msgid "We cannot import data in validated or confirmed order."
+msgstr "No podemos importar datos en un orden validado o confirmado."
+
+#. module: import_purchase_order_lines
+#: model:ir.model.fields.selection,name:import_purchase_order_lines.selection__import_po_line_wizard__import_option__xls
+msgid "XLS File"
+msgstr "Archivo XLS"
+
+#. module: import_purchase_order_lines
+#: model:ir.model,name:import_purchase_order_lines.model_import_po_line_wizard
+msgid "import.po.line.wizard"
+msgstr ""

@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo> 
+
+    <record id="view_product_form_inherit_instashop" model="ir.ui.view">
+        <field name="name">product.product.instashop.form</field>
+        <field name="model">product.product</field>
+        <field name="inherit_id" ref="product.product_normal_form_view" />
+        <field name="arch" type="xml">
+            <xpath expr="//page[@name='purchase']" position='after'>
+                <page name="instashop" string="Instashop">
+                    <group name="instashop">
+                        <field name="available_on_instashop"/>
+                    </group>
+                </page>
+            </xpath>
+        </field>
+        <field name="groups_id" eval="[(4, ref('base.group_system'))]" />
+    </record>
+
+    <!-- Server Action -->
+    <record id="action_add_to_instashop" model="ir.actions.server">
+        <field name="name">Synchronize with Instashop</field>
+        <field name="model_id" ref="product.model_product_product"/>
+        <field name="state">code</field>
+        <field name="code">action = records.sync_with_instashop()</field>
+        <field name="binding_model_id" ref="product.model_product_product"/>
+        <field name="groups_id" eval="[(4, ref('base.group_system'))]" />
+    </record>
+
+    <record id="action_remove_from_instashop" model="ir.actions.server">
+        <field name="name">UnSynchronize with Instashop</field>
+        <field name="model_id" ref="product.model_product_product"/>
+        <field name="state">code</field>
+        <field name="code">action = records.unsync_with_instashop()</field>
+        <field name="binding_model_id" ref="product.model_product_product"/>
+        <field name="groups_id" eval="[(4, ref('base.group_system'))]" />
+    </record>
+</odoo>

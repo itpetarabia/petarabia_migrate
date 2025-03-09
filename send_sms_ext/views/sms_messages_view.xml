@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record id="view_sms_messages_gateway_tree" model="ir.ui.view">
+        <field name="name">sms.messages.gateway.tree</field>
+        <field name="model">sms.messages.gateway</field>
+        <field name="arch" type="xml">
+            <tree string="Messages">
+                <field name="name" />
+                <field name="message" />
+                <field name="sms_type" />
+                <field name="date"/>
+                <field name="state"/>
+                <field name="company_id" groups="base.group_multi_company"/>
+            </tree>
+        </field>
+    </record>
+
+    <record id="view_sms_messages_gateway_form" model="ir.ui.view">
+        <field name="name">sms.messages.gateway.form</field>
+        <field name="model">sms.messages.gateway</field>
+        <field name="arch" type="xml">
+            <form string="Message">
+               <header>
+                   <button name="sms_confirm" type="object" states="draft" string="Confirm Message" class="oe_highlight"/>
+                   <button name="sms_cancel" type="object" states="draft,confirm" string="Cancel Message"/>
+                   <button name="sms_draft" type="object" states="cancel" string="Set to Draft"/>
+                   <field name="state" widget="statusbar" statusbar_visible="draft,confirm"/>
+               </header>
+               <sheet string="Message">
+                    <group>
+                        <field name="sms_type" attrs="{'readonly': [('state', 'in', ('done', 'cancel','confirm'))]}"/>
+                        <field name="name" attrs="{'readonly': [('state', 'in', ('done', 'cancel','confirm'))]}"/>
+                        <!-- <field name="partner_ids" widget="many2many_tags" attrs="{'readonly':[('receivers','=','all')]}" /> -->
+                        <field name="message" attrs="{'readonly': [('state', 'in', ('done', 'cancel','confirm'))]}"/>
+                        <field name="date" attrs="{'readonly': [('state', 'in', ('done', 'cancel','confirm'))]}"/>
+                        <field name="company_id" groups="base.group_multi_company" attrs="{'readonly': [('state', 'in', ('done', 'cancel','confirm'))]}"/>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+
+
+         <record id="action_sms_messages_gateway_tree" model="ir.actions.act_window">
+            <field name="name">SMS Templates</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">sms.messages.gateway</field>
+            <field name="view_mode">tree,form</field>
+            <field name="help" type="html">
+              <p class="oe_view_nocontent_create">
+                Click to create a sms message. 
+              </p>
+            </field>
+        </record>
+        
+
+        <menuitem action="action_sms_messages_gateway_tree" id="menu_sms_message_gateway" groups="base.group_user" name="SMS Gateway" sequence="36" web_icon="send_sms_ext,static/description/icon.png"/>
+
+</odoo>
