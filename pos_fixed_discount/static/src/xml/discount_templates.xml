@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templates id="template" xml:space="preserve">
+
+    <t t-name="DiscountButton" t-inherit="pos_discount.DiscountButton" t-inherit-mode="extension" owl="1">
+        <xpath expr="//span/span[2]" position="replace">
+        <span>Discount(%)</span>
+        </xpath>
+    </t>
+
+    <t t-name="posFixedDiscountButton" owl="1">
+        <span class="control-button js_discount_amount">
+            <i class="fa fa-tag"></i>
+            <span> </span>
+            <span>Discount(Amount)</span>
+        </span>
+    </t>
+
+    <t t-name="NumpadWidget" t-inherit="point_of_sale.NumpadWidget" t-inherit-mode="extension" owl="1">
+    <!--<xpath expr="//button[16]" position="after">
+         <button class="mode-button" t-att-class="{
+                        'selected-mode': props.activeMode === 'discount_fixed',
+                        'disabled-mode': !hasManualDiscount
+                    }"
+                    style="width:100%;height:45px;"
+                    t-att-disabled="!hasManualDiscount"
+                    t-on-click="changeMode('discount_fixed')">Disc.Fixed</button>
+    </xpath>-->
+    <xpath expr="//button[12]" position="replace">
+        <!--<button class="mode-button" t-att-class="{
+                    'selected-mode': props.activeMode === 'price',
+                    'disabled-mode': !hasPriceControlRights
+                }" t-att-disabled="!hasPriceControlRights"
+                    t-on-click="changeMode('price')">Price</button>
+        -->
+        <button class="mode-button" t-att-class="{
+                        'selected-mode': props.activeMode === 'discount_fixed',
+                        'disabled-mode': !hasManualDiscount
+                    }"
+                    t-att-disabled="!hasManualDiscount"
+                    t-on-click="changeMode('discount_fixed')">Disc.<br/>Fixed</button>
+
+    </xpath>
+    </t>
+    <!--
+    <t t-name="Orderline" t-inherit="point_of_sale.Orderline" t-inherit-mode="extension" owl="1">
+        <xpath expr="//ul[hasclass('info-list')]" position="inside">
+            <t t-if="props.line.get_discount_fixed()">
+                <li class="info">
+                    With a
+                    <em>
+                        <t t-esc="env.pos.format_currency(props.line.get_discount_fixed())"/>
+                    </em>
+                    discount
+                </li>
+            </t>
+
+        </xpath>
+    </t>
+    -->
+    <t t-name="Orderline" t-inherit="point_of_sale.Orderline" t-inherit-mode="extension" owl="1">
+        <xpath expr="//ul[hasclass('info-list')]" position="replace">
+            <ul class="info-list">
+                <t t-if="props.line.get_quantity_str() !== '1' || props.line.selected ">
+                    <li class="info">
+                        <em>
+                            <t t-esc="props.line.get_quantity_str()" />
+                        </em>
+                        <span> </span><t t-esc="props.line.get_unit().name" />
+                        at
+                        <t t-if="props.line.display_discount_policy() == 'without_discount' and
+                            props.line.get_unit_display_price() != props.line.get_lst_price()">
+                            <s>
+                                <t t-esc="env.pos.format_currency(props.line.get_fixed_lst_price(),'Product Price')" />
+                            </s>
+                            <t t-esc="env.pos.format_currency(props.line.get_unit_display_price(),'Product Price')" />
+                        </t>
+                        <t t-else="">
+                            <t t-esc="env.pos.format_currency(props.line.get_unit_display_price(),'Product Price')" />
+                        </t>
+                        /
+                        <t t-esc="props.line.get_unit().name" />
+                    </li>
+                </t>
+                <t t-if="props.line.get_discount_str() !== '0'">
+                    <t t-if="props.line.get_discount()">
+                        <li class="info">
+                            With a
+                            <em>
+                                <t t-esc="props.line.get_discount_str()" />%
+                            </em>
+                            discount
+                        </li>
+                    </t>
+                    <t t-if="props.line.get_discount_fixed()">
+                        <li class="info">
+                            With a
+                            <em>
+                                <t t-esc="env.pos.format_currency(props.line.get_discount_fixed())"/>
+                            </em>
+                            discount
+                        </li>
+                    </t>
+                </t>
+            </ul>
+        </xpath>
+    </t>
+
+</templates>

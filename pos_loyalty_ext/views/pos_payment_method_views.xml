@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+
+    <record id="pos_payment_method_view_form_inherit_pos_loya" model="ir.ui.view">
+        <field name="name">pos.payment.method.form.inherit</field>
+        <field name="model">pos.payment.method</field>
+        <field name="inherit_id" ref="point_of_sale.pos_payment_method_view_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='is_cash_count']" position="after">
+                <field name="payment_method_loyal_ext" />
+
+            </xpath>
+        </field>
+    </record>
+
+
+     <record id="product_pricelist_view_inherit_pos" model="ir.ui.view">
+        <field name="name">product.pricelist.form.inherit</field>
+        <field name="model">product.pricelist</field>
+        <field name="inherit_id" ref="product.product_pricelist_view"/>
+        <field name="arch" type="xml">
+             <xpath expr="//field[@name='company_id']" position="after">
+                 <field name="pricelist_loyal_ext" />
+
+             </xpath>
+
+        </field>
+    </record>
+
+    <!--
+    <record id="pos_config_view_form_inherit_pos_loyalty_inh" model="ir.ui.view">
+        <field name="name">pos.config.form.inherit.pos.loyalty.ext</field>
+        <field name="model">pos.config</field>
+        <field name="inherit_id" ref="pos_loyalty.pos_config_view_form_inherit_pos_loyalty"/>
+        <field name="arch" type="xml">
+            <field name="loyalty_id" position="after">
+                 <div class="mt16">
+                    <label for="payment_method_loyal_ext" string="Exclude payment methods calculate in Loyalty"/>
+                     <field name="payment_method_loyal_ext" widget="many2many_tags" options="{'no_create': True}"/>
+                </div>
+                <div class="mt16">
+                    <label for="pricelist_loyal_ext" string="Exclude Pricelist methods calculate in Loyalty"/>
+                    <field name="pricelist_loyal_ext" widget="many2many_tags" options="{'no_create': True}"/>
+                </div>
+
+            </field>
+
+        </field>
+    </record>
+    -->
+
+</odoo>

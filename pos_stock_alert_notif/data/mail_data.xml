@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Template and notification section -->
+    <data noupdate="1">
+        <record id="email_template_pos_order_out_stock" model="mail.template">
+            <field name="name">Pos order out of stock</field>
+            <field name="model_id" ref="point_of_sale.model_pos_order"/>
+            <field name="subject">Out-of-Stock In - ${object.out_stock_location_id.display_name or object.config_id.default_location_src_id.display_name or object.config_id.name}</field>
+            <field name="email_from">${(object.user_id.email_formatted or user.email_formatted) | safe}</field>
+            <field name="partner_to">${ object.get_stock_alert_notif_partner_to_email() }</field>
+            <field name="body_html" type="html">
+<div style="margin: 0px; padding: 0px;">
+    <p style="margin: 0px; padding: 0px; font-size: 13px;">
+        % if object.out_stock_line:
+            <table class="table table-bordered" style="margin-top:10px;border: 1px solid #E0E2E6; width: 100%; margin-bottom: 1rem; color: #444B5A; border-collapse: collapse;font-size:12px;">
+                <tbody>
+                    <tr>
+                        <td colspan='2' style="border: 1px solid #E0E2E6;padding:0.75rem;text-align:center;font-weight:bold;">Order Ref</td>
+                        <td colspan='2' style="border: 1px solid #E0E2E6;padding:0.75rem;text-align:center;font-weight:bold;">Order Date</td>
+                        <td colspan='2' style="border: 1px solid #E0E2E6;padding:0.75rem;text-align:center;font-weight:bold;">Salesman</td>
+                    </tr>
+                    <tr>
+                        <td colspan='2' style="padding: 0.75rem;border:1px solid #E0E2E6;text-align:center">
+                            ${object.name or ''}
+                        </td>
+                        <td colspan='2' style="padding: 0.75rem;border:1px solid #E0E2E6;text-align:center">
+                            ${ctx.get('date_order_str','')}
+                        </td>
+                         <td colspan='2' style="padding: 0.75rem;border:1px solid #E0E2E6;text-align:center">
+                            ${ctx.get('sales_person','')}
+                        </td>
+                    </tr>
+                    <tr>
+                        <th style="border: 1px solid #E0E2E6;padding:0.75rem;text-align:left;">Barcode</th>
+                        <th style="border: 1px solid #E0E2E6;padding:0.75rem;text-align:left;">Product</th>
+                        <th style="border: 1px solid #E0E2E6;padding:0.75rem;text-align:left;">Lot / Serial</th>
+                        <th style="border: 1px solid #E0E2E6;padding:0.75rem;text-align:right;">Available Qty</th>
+                        <th style="border: 1px solid #E0E2E6;padding:0.75rem;text-align:right;">Sold Qty</th>
+                        <th style="border: 1px solid #E0E2E6;padding:0.75rem;text-align:right;">Diff. Qty</th>
+                    </tr>
+                    % for line in object.out_stock_line:
+                        <tr>
+                            <td style="padding: 0.75rem;border:1px solid #E0E2E6;">
+                                ${line.product_id.barcode or ''}
+                            </td>
+                            <td style="padding: 0.75rem;border:1px solid #E0E2E6;">
+                                ${line.product_id.display_name}
+                            </td>
+                             <td style="padding: 0.75rem;border:1px solid #E0E2E6;">
+                                % if line.lot_id:
+                                    ${line.lot_id.name}
+                                %endif
+                                 % if not line.lot_id and line.lot_name:
+                                    ${line.lot_name} (Unavailable in system)
+                                 %endif
+                            </td>
+                            <td style="padding: 0.75rem;border:1px solid #E0E2E6;text-align:right;">
+                                ${line.qty_available}
+                            </td>
+                            <td style="padding: 0.75rem;border:1px solid #E0E2E6;text-align:right;">
+                                ${line.qty_required}
+                            </td>
+                            <td style="padding: 0.75rem;border:1px solid #E0E2E6;text-align:right;">
+                                ${abs(line.qty_difference)}
+                            </td>
+                        </tr>
+                    %endfor
+                </tbody>
+             </table>
+        %endif
+    </p>
+</div>
+            </field>
+            <!--
+            <field name="report_template" ref="account_invoices"/>
+            <field name="report_name">Product Expiry List</field>
+            -->
+            <field name="lang">${object.env.user.partner_id.lang}</field>
+            <!--
+            <field name="user_signature" eval="False"/>
+            -->
+            <field name="auto_delete" eval="True"/>
+        </record>
+    </data>
+</odoo>

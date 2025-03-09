@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+
+    <template id="report_top20_customer_document">
+        <t t-call="web.html_container">
+            <t t-call="web.external_layout">
+                <div class="page">
+                    <h2>
+                        <span>Top POS Customer</span>
+                        
+                        
+                        <table class="table table-sm mt48">
+	                        <thead>
+	                            <tr>
+	                                <th><strong>SL NO</strong></th>
+	                                <th><strong>Customer</strong></th>
+									<th><strong>Phone</strong></th>
+									<th><strong>Mobile</strong></th>
+									<th><strong>Email</strong></th>
+	                                <th><strong>Total</strong></th>
+	                            </tr>
+	                        </thead>
+	                        <tbody>
+	                        	<t t-set="column" t-value="o.get_top20_customer()" />
+								<t t-set="i" t-value="0" />
+		                    	<t t-foreach="column" t-as="col">
+								<t t-set="i" t-value="i+1" />
+			                    <tr>
+			                    <td ><span t-esc="i"/></td>
+		                    	<td ><span t-esc="col['name']"/></td>
+								<td ><span t-esc="col['phone']"/></td>
+								<td ><span t-esc="col['mobile']"/></td>
+								<td ><span t-esc="col['email']"/></td>
+		                    	<td ><span t-esc="'%.3f' % col['total']"/></td>
+		                    	</tr>
+	                            </t>
+	                        </tbody>
+                    	</table>
+                    </h2>
+                    
+                </div>
+            </t>
+         </t>
+    </template>
+
+    <template id="report_top20_customer">
+        <t t-foreach="docs" t-as="o">
+            <t t-set="lang" t-value="o.user_id.lang"/>
+            <t t-call="report_pos_top20_customer.report_top20_customer_document" t-lang="lang"/>
+        </t>
+    </template>
+	
+	<report
+			id="topcustomer_xlsx"
+			model="pos.order"
+			string="Print to XLSX"
+			report_type="xlsx"
+			name="report_pos_top20_customer.xlsx_top_customer"
+			file="top_customer"
+			attachment_use="False"
+			menu = "False"
+		/>
+
+</odoo>

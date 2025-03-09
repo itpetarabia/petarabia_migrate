@@ -1,0 +1,10 @@
+/*  ********* The actionpad (payment, set customer) ********* */
+
+.pos .actionpad .button.set-customer.button-red {
+    
+	background: #ff4c4c;
+}
+.pos .actionpad .button.set-customer.decentered.button-red {
+    background: #ff4c4c;
+	
+}

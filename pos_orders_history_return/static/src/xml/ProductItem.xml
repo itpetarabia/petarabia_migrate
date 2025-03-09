@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templates id="template" xml:space="preserve">
+    <!-- Full replace - may be -->
+    <t t-name="ProductItem" t-inherit="point_of_sale.ProductItem" t-inherit-mode="extension" owl="1">
+        <xpath expr="//div[@class='product-img']" position="inside">
+            <span t-if="env.pos.get_order().mode == 'return'" class="max-return-qty"/>
+        </xpath>
+    </t>
+</templates>

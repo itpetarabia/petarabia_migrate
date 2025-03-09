@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+
+        <record id="pos_top20_customer_report" model="ir.actions.report">
+            <field name="name">Top POS Customer</field>
+            <field name="model">pos.top.customer.wizard</field>
+            <field name="report_type">qweb-pdf</field>
+            <field name="report_name">report_pos_top20_customer.report_top20_customer</field>
+        </record>
+        <!---->
+        <record id="view_pos_top20_customer_wizard" model="ir.ui.view">
+            <field name="name">pos.top.customer.wizard.form</field>
+            <field name="model">pos.top.customer.wizard</field>
+            <field name="arch" type="xml">
+                <form string="POS Top 20 Customer">
+                List  top X customers and their sum
+					<group>
+						<field name="quantity" />
+					</group>
+                    <footer>
+                        <button name="generate_report" string="Print" type="object" class="btn-primary"/>
+						<button name="excel_report" string="Excel" type="object" class="btn-primary"/>
+                        <button string="Cancel" class="btn-secondary" special="cancel" />
+                    </footer>
+                </form>
+            </field>
+        </record>
+        <record id="action_report_pos_top20_customer" model="ir.actions.act_window">
+            <field name="name">Top POS Customer</field>
+            <field name="res_model">pos.top.customer.wizard</field>
+            <field name="view_mode">form</field>
+            <field name="target">new</field>
+        </record>
+        <menuitem id="menu_report_pos_customer_Top20" name="Top Customer" action="action_report_pos_top20_customer" parent="point_of_sale.menu_point_rep" sequence="3"/>
+        
+        
+    </data>
+</odoo>

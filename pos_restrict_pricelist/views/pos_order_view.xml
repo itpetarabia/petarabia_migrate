@@ -1,0 +1,19 @@
+<?xml version="1.0"?>
+<odoo>
+       <record id="view_pos_pos_form_inherit" model="ir.ui.view">
+            <field name="name">pos.order.form</field>
+            <field name="model">pos.order</field>
+            <field name="inherit_id" ref="point_of_sale.view_pos_pos_form"/>
+            <field name="arch" type="xml">
+                <xpath expr="//field[@name='pricelist_id']" position="after">
+                    <field name="is_change_pricelist" invisible="1"/>
+                </xpath>
+                <xpath expr="//field[@name='pricelist_id']" position="attributes">
+                    <attribute name="attrs">{'readonly': ['|',('is_change_pricelist', '=', False),('state', '!=', 'draft')]}</attribute>
+                </xpath>
+            </field>
+    	</record>
+
+    	
+            
+</odoo>

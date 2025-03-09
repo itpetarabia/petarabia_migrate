@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record id="paperformat_backend_pos_receipt" model="report.paperformat">
+        <field name="name">backend pos receipt</field>
+        <field name="format">custom</field>
+        <field name="default" eval="True"/>
+        <field name="page_height">150</field>
+        <field name="page_width">80</field>
+        <field name="orientation">Portrait</field>
+        <field name="margin_top">5</field>
+        <field name="margin_bottom">5</field>
+        <field name="margin_left">3</field>
+        <field name="margin_right">3</field>
+        <field name="header_line" eval="False"/>
+        <field name="header_spacing">0</field>
+        <field name="dpi">90</field>
+    </record>
+
+     <report
+        id="report_pos_receipt_backend"
+        model="pos.order"
+        string="POS backend receipt"
+        report_type="qweb-pdf"
+        name="pos_backend_print_receipt.pos_receipt_report_template_backend"
+        file="pos_backend_print_receipt.pos_receipt_report_template_backend"
+        menu="False"
+        paperformat="pos_backend_print_receipt.paperformat_backend_pos_receipt"
+     />
+
+</odoo>

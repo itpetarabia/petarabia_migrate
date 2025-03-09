@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!-- Copyright 2018 Artem Losev
+     Copyright 2018 Dinar Gabbasov <https://it-projects.info/team/GabbasovDinar>
+     License MIT (https://opensource.org/licenses/MIT). -->
+<templates id="template" xml:space="preserve">
+    <!--<t t-extend="OrderHistory">
+        <t t-jquery=".actions.oe_hidden" t-operation="append">
+            <span class="button reprint"><i class="fa fa-print " /> Reprint</span>
+        </t>
+    </t>-->
+    <t t-name="OrderHistory" t-inherit="pos_orders_history.OrderHistory" t-inherit-mode="extension" owl="1">
+        <xpath expr="//td[@name='td_action']" position="inside">
+            <span t-if="widget.env.pos.config.reprint_orders">
+            <!--<button class="button-reprint" t-on-click.stop="trigger('button-reprint')">-->
+            <button class="button-reprint">
+                <i class="fa fa-print " /> Reprint</button>
+
+            </span>
+        </xpath>
+    </t>
+
+</templates>

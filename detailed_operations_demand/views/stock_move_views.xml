@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+        <record id="view_stock_move_line_detailed_operation_tree_inherit" model="ir.ui.view">
+            <field name="name">stock.move.line.operations.tree.inherit</field>
+            <field name="model">stock.move.line</field>
+            <field name="inherit_id" ref="stock.view_stock_move_line_detailed_operation_tree"/>
+            <field name="arch" type="xml">
+                <xpath expr="//field[@name='product_uom_qty']" position="before">
+                    <field name="qty_demand" string="Demand" readonly="1" attrs="{'column_invisible': [('parent.immediate_transfer', '=', True)]}" optional="show"/>
+                </xpath>
+            </field>
+        </record>
+        <record id="view_move_line_form_inherit" model="ir.ui.view">
+            <field name="name">stock.move.line.form.inherit</field>
+            <field name="model">stock.move.line</field>
+            <field name="inherit_id" ref="stock.view_move_line_form"/>
+            <field name="arch" type="xml">
+                <xpath expr="//field[@name='lot_id']" position="before">
+                    <label for="qty_demand" string="Quantity Demand"/>
+                    <div class="o_row">
+                        <field name="qty_demand" readonly="1"/>
+                        <field name="product_uom_id" options="{'no_create': True}" string="Unit of Measure" groups="uom.group_uom"/>
+                    </div>
+                </xpath>
+            </field>
+        </record>
+        
+
+</odoo>

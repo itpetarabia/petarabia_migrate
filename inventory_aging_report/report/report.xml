@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="report_xlsx_inv_aging" model="ir.actions.report">
+        <field name="name">Inventory Aging Report</field>
+        <field name="model">inv.aging.rpt.wiz</field>
+        <field name="report_type">xlsx</field>
+        <field name="report_name">inv_aging_report</field>
+        <field name="report_file">inv_aging_report</field>
+    </record>
+</odoo>

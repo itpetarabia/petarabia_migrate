@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_pos_pos_form_inherit_print_receipt" model="ir.ui.view">
+        <field name="name">pos.order.form</field>
+        <field name="model">pos.order</field>
+        <field name="inherit_id" ref="point_of_sale.view_pos_pos_form"/>
+        <field name="arch" type="xml">
+        	<xpath expr="//button[@name='refund']" position="after">
+        		<button name="re_print_receipt" string="Print" type="object" class="btn-primary" attrs="{'invisible': [('state', 'in', ['draft','cancel'])]}"/>
+        	</xpath>
+        </field>
+    </record>
+
+</odoo>

@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <template id="total_usd" inherit_id="website_sale.total" customize_show="True" >
+        <xpath expr="//tr[@id='order_total']" position="after">
+
+             <tr id="order_total_usd">
+                  <td class="text-right"><strong>Total in usd:</strong></td>
+                  <td class="text-xl-right">
+                      <strong t-field="website_sale_order.amount_total_usd" class="monetary_field"
+                          t-options='{"widget": "monetary", "display_currency": website_sale_order.currency_usd}'/>
+                  </td>
+             </tr>
+
+        </xpath>
+    </template>
+</odoo>

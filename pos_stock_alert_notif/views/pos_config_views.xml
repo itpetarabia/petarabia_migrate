@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="pos_config_view_form_inherit" model="ir.ui.view">
+        <field name="name">pos.config.form.view.inherit</field>
+        <field name="model">pos.config</field>
+        <field name="inherit_id" ref="point_of_sale.pos_config_view_form"/>
+        <field name="arch" type="xml">
+            <div  id="inventory_location" position="inside">
+                <div class="col-12 col-lg-6 o_setting_box" id="stock_alert_and_notif">
+                    <div class="o_setting_left_pane">
+                        <field name="out_stock_alert"/>
+                    </div>
+                    <div class="o_setting_right_pane">
+                        <label for="out_stock_alert"/>
+                        <div class="text-muted" id="out_stock_alert">
+                           Out of stock alert &amp; notification
+                        </div>
+                        <div class="content-group mt16" attrs="{'invisible': [('out_stock_alert', '=', False)]}">
+                            <div class="row mt16">
+                                <label for="out_stock_notif" string="Notify By Email"  class="col-lg-3 o_light_label"/>
+                                <field name="out_stock_notif"/>
+                            </div>
+                            <div class="row mt8" attrs="{'invisible': [('out_stock_notif', '=', False)]}">
+                                <label string="Notify" for="out_stock_notif_user_ids" class="col-lg-3 o_light_label" />
+                                <field name="out_stock_notif_user_ids" widget="many2many_tags" domain="[('share','=',False)]"/>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </field>
+    </record>
+</odoo>

@@ -1,0 +1,235 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templates id="template" xml:space="preserve">
+
+    <t t-name="PrintReportScreen" owl="1">
+        <div class="receipt-screen screen">
+            <div class="screen-content">
+                <div class="top-content">
+                    <span class="button back" t-on-click="confirm">
+                        <i class="fa fa-angle-double-left"></i>
+                        <span> </span>
+                        <span>Back</span>
+                    </span>
+                    <div class="top-content-center">
+                        <h1>Receipt Printing</h1>
+                    </div>
+                    <span class="button next highlight" t-on-click="confirm">
+                        <span>Ok</span>
+                        <span> </span>
+                        <i class="fa fa-angle-double-right"></i>
+                    </span>
+                </div>
+                <div class="centered-content">
+                    <div class="button print" t-on-click="printReceipt">
+                        <i class="fa fa-print"></i>
+                        <span> </span>
+                        <span>Print</span>
+                    </div>
+                    <div class="pos-receipt-container">
+                        <PosReportPrint order="props.order_id" t-ref="order-receipt"/>
+                        <!--<OrderReceipt order="props.order" t-ref="order-receipt" />-->
+                    </div>
+                </div>
+            </div>
+        </div>
+    </t>
+    <t t-name="PosReportPrint" owl="1">
+        <div class="pos-receipt">
+            <t t-if="report_all.pos.company_logo_base64">
+                <img class="pos-receipt-logo" t-att-src="report_all.pos.company_logo_base64" alt="Logo"/>
+                <br/>
+            </t>
+            <t t-if="!report_all.pos.company_logo_base64">
+                <h2 class="pos-receipt-center-align">
+                    <t t-esc="report_all.company.name" />
+                </h2>
+                <br/>
+            </t>
+            <div class="pos-receipt-contact">
+                <!--<t t-if="report_all.company.contact_address">
+                    <div><t t-esc="report_all.company.contact_address" /></div>
+                </t>-->
+                <t t-if="report_all.company.name">
+                    <div><t t-esc="report_all.company.name" /></div>
+                </t>
+                <t t-if="report_all.company.phone">
+                    <div>Tel:<t t-esc="report_all.company.phone" /></div>
+                </t>
+                <t t-if="report_all.company.vat">
+                    <div>Tax ID:<t t-esc="report_all.company.vat" /></div>
+                </t>
+                <t t-if="report_all.company.email">
+                    <div><t t-esc="report_all.company.email" /></div>
+                </t>
+                <t t-if="report_all.company.website">
+                    <div><t t-esc="report_all.company.website" /></div>
+                </t>
+                <div t-if="env.pos.config.receipt_header"  class="pos-receipt-center-align" style="white-space:pre-line">
+                    <t t-esc="env.pos.config.receipt_header" />
+                </div>
+                <t t-if="report_all.cashier_name">
+                    <div class="cashier">
+                        <div>--------------------------------</div>
+                        <div>Served by <t t-esc="report_all.cashier_name" /></div>
+                    </div>
+                </t>
+            </div>
+            <br />
+            <t t-set="price_total" t-value="0"/>
+            <!--
+            <table class='receipt-orderlines' style="margin-top:5pt;padding:5pt;font-size:11pt;width:100%;" >
+                <thead>
+                    <th style="text-align:left;" width='60%'>Description</th>
+                    <th width='15%'>Qty</th>
+                    <th style="text-align:right;" width='25%'>Price</th>
+                </thead>
+                <t t-set="qty_total" t-value="0"/>
+                <tbody style="border-top: 1px solid black;">
+                    <tr t-foreach='report_all.order_line' t-as='line'>
+                        <td>
+                            <t t-esc='line.product_name.substr(0,20)' />
+                            <t t-if='line.discount !== 0'>
+                                <div class="pos-disc-font">
+                                    Discount: <t t-esc='line.discount' />%
+                                </div>
+                            </t>
+                        </td>
+                        <td>
+                            <value value-decimals='2' value-autoint='on'>
+                                <t t-esc='line.quantity' />
+                                <t t-set="qty_total" t-value="qty_total+line.quantity"/>
+                            </value>
+                            <t t-if='line.uom !== "Units"'>
+                                <t t-esc='line.uom' />
+                            </t>
+                        </td>
+                        <td class="pos-right-align">
+                            <t t-esc='report_all.pos.format_currency(line.price_subtotal)' />
+                            <t t-set="price_total" t-value="price_total+(line.price_subtotal)"/>
+                        </td>
+                    </tr>
+
+                </tbody>
+            </table>
+            -->
+            <!-- Orderlines -->
+
+            <div class="orderlines">
+                <t t-foreach="report_all.order_line" t-as="line" t-key="line.id">
+                    <t t-if="line.discount == 0 and line.quantity == 1 and line.uom == 'Units'">
+                        <div>
+                            <t t-esc="line.product_name.substr(0,20)" />
+                            <span t-esc="report_all.pos.format_currency_no_symbol(line.price_subtotal_incl)" class="price_display pos-receipt-right-align"/>
+                            <t t-set="price_total" t-value="price_total+(line.price_subtotal)"/>
+                        </div>
+                        <!--<WrappedProductNameLines line="line" />-->
+                    </t>
+                    <t t-else="">
+                        <div t-esc="line.product_name.substr(0,20)" />
+                        <!--<WrappedProductNameLines line="line" />-->
+                        <t t-if="line.discount !== 0">
+                            <div class="pos-receipt-left-padding">
+                                Discount: <t t-esc="line.discount" />%
+                            </div>
+                        </t>
+                        <div class="pos-receipt-left-padding">
+                            <t t-esc="Math.round(line.quantity * Math.pow(10, env.pos.dp['Product Unit of Measure'])) / Math.pow(10, env.pos.dp['Product Unit of Measure'])"/>
+                            <t t-if="line.uom !== 'Units'" t-esc="line.uom" />
+                            x
+                            <t t-esc="env.pos.format_currency_no_symbol(line.price_unit)" />
+                            <span class="price_display pos-receipt-right-align">
+                                <t t-esc="env.pos.format_currency_no_symbol(line.price_subtotal_incl)" />
+                                <t t-set="price_total" t-value="price_total+(line.price_subtotal)"/>
+                            </span>
+                        </div>
+                    </t>
+                </t>
+            </div>
+
+
+
+            <div class="pos-receipt-right-align">--------</div>
+            <br/>
+            <!--<div>Subtotal<span t-esc="report_all.pos.format_currency(price_total)" class="pos-receipt-right-align"/></div>-->
+            <t t-set="tax_total" t-value="0"/>
+            <t t-foreach="report_all.taxes" t-as="tax" t-key="tax.name">
+                <t t-set="tax_total" t-value="tax_total+tax.total"/>
+                <!--<div>
+                    <t t-esc="tax.name" />
+                    <span t-esc='report_all.pos.format_currency_no_symbol(tax.total)' class="pos-receipt-right-align"/>
+                </div>-->
+            </t>
+
+
+            <div class="pos-receipt-amount-change">
+                TOTAL
+                <span t-esc="report_all.pos.format_currency(tax_total + price_total)" class="pos-receipt-right-align"/>
+            </div>
+            <!--<t t-if="report_all.amount_round">
+                <div class="pos-receipt-amount-change">
+                    ROUNDED
+                    <span t-esc="env.pos.format_currency(report_all.total_paid)" class="pos-receipt-right-align"/>
+                </div>
+            </t>
+            <br/><br/>-->
+            <t t-if="report_all.amount_round">
+                <div class="pos-receipt-amount-change">
+                    Rounding
+                    <span t-esc="env.pos.format_currency(report_all.amount_round)" class="pos-receipt-right-align"/>
+                </div>
+            </t>
+            <t t-if="report_all.total_paid">
+                <div class="pos-receipt-amount-change">
+                    To Pay
+                    <span t-esc="env.pos.format_currency(report_all.total_paid)" class="pos-receipt-right-align"/>
+                </div>
+            </t>
+            <br/>
+            <t t-foreach="report_all.payments" t-as="line" t-key="line.name">
+                <div>
+                    <t t-esc="line.name" />
+                    <span t-esc="report_all.pos.format_currency_no_symbol(line.total)" class="pos-receipt-right-align"/>
+                </div>
+            </t>
+            <br/>
+            <div class="pos-receipt-amount-change receipt-change">
+                CHANGE
+                <span t-esc="env.pos.format_currency(Math.abs(report_all.amount_return))" class="pos-receipt-right-align"/>
+            </div>
+            <br/>
+            <t t-if="report_all.disc_amount">
+                <div>
+                    Discounts
+                    <span t-esc="report_all.pos.format_currency_no_symbol(report_all.disc_amount)" class="pos-receipt-right-align"/>
+                </div>
+            </t>
+            <t t-foreach="report_all.taxes" t-as="tax" t-key="tax.name">
+                <div>
+                    <t t-esc="tax.name" />
+                    <span t-esc='report_all.pos.format_currency_no_symbol(tax.total)' class="pos-receipt-right-align"/>
+                </div>
+            </t>
+            <t t-if="tax_total">
+            <div>Total Taxes<span t-esc="report_all.pos.format_currency(tax_total)" class="pos-receipt-right-align"/></div>
+            </t>
+            <div class="before-footer" />
+            <t t-if="report_all.pos_order_barcode">
+                <div class="pos-center-align" align="center">
+                    <img style="width:300px;height:100px;" t-att-src='report_all.pos_order_barcode' alt="Reference"/>
+                </div>
+            </t>
+
+            <div t-if="env.pos.config.receipt_footer"  class="pos-receipt-center-align" style="white-space:pre-line">
+                <br/>
+                <t t-esc="env.pos.config.receipt_footer" />
+                <br/>
+                <br/>
+            </div>
+            <div class="pos-receipt-order-data">
+                <div><t t-esc="report_all.reference" /></div>
+                <div><t t-esc='report_all.date' /></div>
+            </div>
+        </div>
+    </t>
+</templates>
+

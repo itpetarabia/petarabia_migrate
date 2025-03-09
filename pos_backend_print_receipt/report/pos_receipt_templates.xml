@@ -1,0 +1,136 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+
+    <template id="pos_receipt_report_template_backend">
+        <t t-foreach="docs" t-as="o">
+        <t t-call="web.basic_layout">
+            <t t-esc="o.change_size_page(o.lines)"/>
+            <div class="page">
+                <br/>
+                <div class="orderinfo" style="font-size: 12px;text-align: center">
+                    <img t-if="o.company_id.logo" t-att-src="image_data_uri(o.company_id.logo)" style="max-height: 100px;max-width: 150px;" alt="Logo"/>
+                    <br/>
+                    <t t-esc="o.company_id.name"/><br/>
+                    Tel:<t t-esc="o.company_id.phone"/>
+                    <t t-if='o.company_id.vat'>
+                        <br/>VAT:<t t-esc='o.company_id.vat' />
+                    </t>
+                    <t t-if="o.company_id.email">
+                        <br/><t t-esc="o.company_id.email"/>
+                    </t>
+                    <t t-if="o.company_id.website">
+                        <br/><t t-esc="o.company_id.website"/>
+                    </t>
+                    <br/>-------------------------------------------------<br/>
+                    Served by <t t-esc="o.user_id.name"/>
+                </div>
+                <br/>
+                <table width="100%" style="font-size: 13px;">
+                    <tbody>
+                        <tr t-foreach="o.lines" t-as="line">
+                            <td width="60%"><span t-esc="line.product_id.name"/> </td>
+                            <td width="20%" style="text-align: right;"><span t-esc="line.qty"/></td>
+                            <td width="20%" style="text-align: right;"><span t-field="line.price_subtotal" t-options="{'widget': 'monetary', 'display_currency': o.company_id.currency_id}"/> </td>
+                        </tr>
+                        <tr>
+                            <td></td>
+                            <td></td>
+                            <td style="text-align: right;border-bottom: 1px dashed #484848;padding-top: 5px;"></td>
+                        </tr>
+                        <tr>
+                            <td colspan="2" style="padding-top: 5px;">Subtotal</td>
+                            <td style="text-align: right;"><span t-esc="o.amount_total-o.amount_tax" t-options="{'widget': 'monetary', 'display_currency': o.company_id.currency_id}"/> </td>
+                        </tr>
+                        <tr>
+                            <td colspan="2">Taxes</td>
+                            <td style="text-align: right"><span t-field="o.amount_tax" t-options="{'widget': 'monetary', 'display_currency': o.company_id.currency_id}"/> </td>
+                        </tr>
+                        <!--
+                        <t t-foreach="o.amount_by_group" t-as="amount_by_group">
+                            <tr style="">
+                                <t t-if ="amount_by_group[0]">
+                                    <td colspan="2">
+                                        <span t-esc="amount_by_group[0]"/>
+                                    </td>
+                                    <td class="text-right o_price_total" style="text-align: right">
+                                        <span t-esc="amount_by_group[1]"
+                                            t-options='{"widget": "monetary", "display_currency": o.pricelist_id.currency_id}'/>
+                                    </td>
+                                </t>
+                            </tr>
+                        </t>
+                        -->
+                        <tr>
+                            <t t-if="o.get_total_discount() > 0">
+                                <td colspan="2">Discount</td>
+                                <td style="text-align: right">
+                                    <span t-esc="o.get_total_discount()" t-options="{'widget': 'monetary', 'display_currency': o.company_id.currency_id}"/>
+
+                                </td>
+                            </t>
+                        </tr>
+                        <tr>
+                            <td></td>
+                            <td></td>
+                            <td style="text-align: right;border-bottom: 1px dashed #484848;padding-top: 5px;"></td>
+                        </tr>
+                        <tr>
+                            <td style="font-size: 17px;font-weight:bold;text-align: center;padding-top: 5px;">TOTAL</td>
+                            <td/>
+                            <td style="font-size: 17px;font-weight:bold;text-align: right;"><span t-field="o.amount_total" t-options="{'widget': 'monetary', 'display_currency': o.company_id.currency_id}"/> </td>
+                        </tr>
+                        <tr><td colspan="3"><br/></td></tr>
+                        <t t-set="payments" t-value="o.get_total_payment()"/>
+                        <!--
+                        <tr t-foreach="o.statement_ids" t-as="stmt">
+                            <td colspan="2"><span t-field="stmt.journal_id.display_name"/></td>
+                            <td style="text-align: right"><span t-field="stmt.amount"/> </td>
+                        </tr>
+                        -->
+                        <t t-if="payments">
+                        <tr t-foreach="payments" t-as="payment">
+                            <td colspan="2"><span t-esc="payment[0].display_name"/></td>
+                            <td style="text-align: right"><span t-esc="payment[1]" t-options="{'widget': 'monetary', 'display_currency': o.company_id.currency_id}"/> </td>
+                        </tr>
+                        </t>
+
+
+                    </tbody>
+                </table>
+                <br/>
+                <div class='customerinfo' style="font-size: 13px;text-align: center">
+                    <t t-if="o.partner_id">
+                        <br/>
+                        <div class="title">
+                            <t t-esc="o.partner_id.name"/>
+                        </div>
+                        <div class="subtitle">
+                            <t t-if="o.partner_id.phone">
+                                <t t-esc='o.partner_id.phone' />
+                            </t>
+                            <t t-else="">
+                                <t t-if="o.partner_id.mobile">
+                                    <t t-esc='o.partner_id.mobile' />
+                                </t>
+                            </t>
+                        </div>
+                    </t>
+                </div>
+                <br/>
+                <t t-set="date_order" t-value="o.get_extra_values('date_order')"/>
+                <div class="orderinfo" style="font-size: 12px;text-align: center">
+                    <span t-esc='o.pos_reference' /><br/>
+                    <t t-if="date_order.get('dates')">
+                        <span t-esc="date_order.get('dates')" />
+                        <span t-esc="date_order.get('times','')"/>
+                    </t>
+                </div>
+
+            </div>
+        </t>
+        </t>
+    </template>
+
+
+</odoo>

@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templates id="template" xml:space="preserve">
+    <t t-extend="ConfirmPopup" t-inherit="point_of_sale.ConfirmPopup" t-inherit-mode="extension" owl="1">
+        <xpath expr="//main[hasclass('body')]" position="replace">
+           <main class="body" t-if="!props.custom">
+               <t t-esc="props.body" />
+           </main>
+           <main class="body" t-if="props.custom" style="text-align:left;">
+               <t t-set="count" t-value="0"/>
+               <t t-foreach="props.body.split('/mt_br/')" t-as="body_val">
+                   <t t-set="count" t-value="count+1"/>
+                   <br t-if="count != 1"/>
+                   <t t-esc="body_val"/>
+               </t>
+           </main>
+        </xpath>
+    </t>
+</templates>

@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templates id="template" xml:space="preserve">
+
+    <t t-name="PointsCounter" t-inherit="pos_loyalty.PointsCounter" t-inherit-mode="extension" owl="1">
+        <xpath expr="//t[@t-if='order and (get_points_won() != 0 or get_points_spent() != 0)']" position="attributes">
+            <attribute name="t-if">order and get_points_total() != 0</attribute>
+        </xpath>
+        <xpath expr="//t[@t-if='get_points_won()']" position="attributes">
+            <attribute name="t-if"></attribute>
+        </xpath>
+
+    </t>
+
+ </templates>

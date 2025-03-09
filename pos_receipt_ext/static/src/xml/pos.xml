@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templates id="template" xml:space="preserve">
+    <t t-name="OrderReceiptext" t-inherit="point_of_sale.OrderReceipt" t-inherit-mode="extension" owl="1">
+    	<xpath expr="//div[hasclass('loyalty')]//span[hasclass('pos-receipt-center-align')]" position="inside">
+    		<t t-if='receipt.client.phone'>
+                <div><t t-esc='receipt.client.phone' /></div>
+                <br/>
+            </t>
+    	</xpath>
+    </t>
+</templates>

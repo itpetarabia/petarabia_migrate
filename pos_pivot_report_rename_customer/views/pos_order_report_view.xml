@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+
+        <record id="point_of_sale.action_report_pos_order_all" model="ir.actions.act_window">
+            <field name="name">Orders Analysis</field>
+            <field name="res_model">report.pos.order</field>
+            <field name="view_mode">graph,pivot</field>
+            <field name="search_view_id" ref="point_of_sale.view_report_pos_order_search"/>
+            <field name="context">{
+                'group_by_no_leaf':1,
+                'custom_pivot':True,
+                'group_by':[]
+                }
+            </field>
+        </record>
+
+        
+</odoo>

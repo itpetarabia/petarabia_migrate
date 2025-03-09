@@ -1,0 +1,141 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+
+    <template id="report_dissatisfied_customer_document">
+        <t t-call="web.html_container">
+            <t t-call="web.external_layout">
+                <div class="page">
+                    <h2>
+                        <span>Dissatisfied Customer</span>
+                        
+                        
+                        <table class="table table-sm mt48">
+	                        <thead>
+	                            <tr>
+	                                <th style="width:3%"><strong>NO</strong></th>
+	                                <th style="width:23%"><strong>Customer</strong></th>
+									<th style="width:12%"><strong>Mobile</strong></th>
+									<th style="width:12%"><strong>Phone</strong></th>
+									<th style="width:12%"><strong>Email</strong></th>
+	                                <th><strong>Last Visit</strong></th>
+									<th style="width:5%"><strong>Days</strong></th>
+	                            </tr>
+	                        </thead>
+	                        <tbody>
+
+								<t t-set="column" t-value="o.get_dissatisfied_customer()" />
+								<t t-set="i" t-value="0" />
+                                <t t-foreach="column" t-as="col">
+									<t t-set="i" t-value="i+1" />
+									<tr>
+										<td>
+											<span t-esc="i"/>
+										</td>
+										<td>
+											<span t-esc="col['name']"/>
+										</td>
+										<td>
+											<span t-esc="col['mobile']"/></td>
+										<td>
+											<span t-esc="col['phone']"/>
+										</td>
+										<td>
+											<span t-esc="col['email']"/>
+										</td>
+										<td>
+											<span t-esc="context_timestamp(col['last_date']).strftime('%d-%b-%Y')"/>
+										</td>
+										<td>
+											<span t-esc="(datetime.datetime.now() - col['last_date']).days"/>
+										</td>
+									</tr>
+	                            </t>
+
+	                        </tbody>
+                    	</table>
+                    </h2>
+                    
+                </div>
+            </t>
+         </t>
+    </template>
+
+    <template id="report_dissatisfied_customer">
+        <t t-foreach="docs" t-as="o">
+            <t t-set="lang" t-value="o.user_id.lang"/>
+            <t t-call="report_pos_dissatisfied_customers.report_dissatisfied_customer_document" t-lang="lang"/>
+        </t>
+    </template>
+	
+	<template id="report_slow_customer_document">
+        <t t-call="web.html_container">
+            <t t-call="web.external_layout">
+                <div class="page">
+                    <h2>
+                        <span>Slow Customer</span>
+                        
+                        
+                        <table class="table table-sm mt48">
+	                        <thead>
+	                            <tr>
+	                                <th style="width:5%"><strong>NO</strong></th>
+	                                <th style="width:20%"><strong>Customer</strong></th>
+									<th style="width:15%"><strong>Mobile</strong></th>
+									<th style="width:15%"><strong>Phone</strong></th>
+									<th style="width:15%"><strong>Email</strong></th>
+									<th style="width:15%"><strong>Last Branch</strong></th>
+									<th style="width:15%"><strong>Total Purchased</strong></th>
+	                            </tr>
+	                        </thead>
+	                        <tbody>
+								<span t-set="customer" t-value="o.get_slow_customer()" />
+                                <t t-foreach="range(len(customer))" t-as="i">
+									<tr>
+										<td style="width:5%"><span t-esc="i+1"/></td>
+										<td style="width:20%"><span t-esc="customer[i]['name']"/></td>
+										<td style="width:15%"><span t-esc="customer[i]['mobile']"/></td>
+										<td style="width:15%"><span t-esc="customer[i]['phone']"/></td>
+										<td style="width:15%"><span t-esc="customer[i]['email']"/></td>
+										<td style="width:15%"><span t-esc="customer[i]['branch']"/></td>
+										<td style="width:15%"><span t-esc="'%.3f' % customer[i]['total']"/></td>
+									</tr>
+	                            </t>
+
+	                        </tbody>
+                    	</table>
+                    </h2>
+                    
+                </div>
+            </t>
+         </t>
+    </template>
+
+    <template id="report_slow_customer">
+        <t t-foreach="docs" t-as="o">
+            <t t-call="report_pos_dissatisfied_customers.report_slow_customer_document" />
+        </t>
+    </template>
+
+	<report
+			id="dissatisfiedcustomer_xlsx"
+			model="pos.dissatisfied.customer.wizard"
+			string="Print to XLSX"
+			report_type="xlsx"
+			name="report_pos_dissatisfied_customers.xlsx_pos_dissatisfied"
+			file="Dissatisfied Customers"
+			attachment_use="False"
+			menu = "False"
+		/>
+		
+	<report
+			id="slowcustomer_xlsx"
+			model="pos.slow.customer.wizard"
+			string="Print to XLSX"
+			report_type="xlsx"
+			name="report_pos_dissatisfied_customers.xlsx_pos_slow_customer"
+			file="Slow POS Customers"
+			attachment_use="False"
+			menu = "False"
+		/>
+
+</odoo>

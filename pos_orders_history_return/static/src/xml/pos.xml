@@ -1,0 +1,238 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!-- Copyright 2018 Dinar Gabbasov <https://it-projects.info/team/GabbasovDinar>
+     License MIT (https://opensource.org/licenses/MIT). -->
+<templates id="template" xml:space="preserve">
+    <!--<t t-extend="OrderHistory">
+        <t t-jquery=".actions.oe_hidden" t-operation="append">
+            <t t-if="!order.returned_order">
+                <span class="button return"><i class="fa fa-undo" /> Return</span>
+            </t>
+        </t>
+    </t>-->
+    <t t-name="OrderHistory" t-inherit="pos_orders_history.OrderHistory" t-inherit-mode="extension" owl="1">
+        <xpath expr="//td[@name='td_action']" position="inside">
+            <!--<span t-if="!order.returned_order and widget.env.pos.config.return_orders">-->
+            <span t-if="widget.env.pos.config.return_orders">
+            <button class="button-return">
+                <i class="fa fa-undo " /> Return</button>
+
+            </span>
+        </xpath>
+        <xpath expr="//td/span[hasclass('details')]" position="replace">
+            <span class='details'>
+                <t t-esc='order.pos_reference' />
+                <t t-if="order.returned_order_id">
+                  	<br/>(RTN:<t t-esc="order.rtn_pos_reference"/>)
+                  </t>
+            </span>
+        </xpath>
+        <!--<t t-if="order.returned_order and widget.pos.config.return_orders">
+            <span class="button return"><i class="fa fa-undo"></i> Return</span>
+        </t>-->
+    </t>
+    <t t-name="OrdersHistoryScreenWidget" t-inherit="pos_orders_history.OrdersHistoryScreenWidget" t-inherit-mode="extension" owl="1">
+        <xpath expr="//section[hasclass('top-content')]/span[1]" position="after">
+            <span class='button return-no-receipt' t-on-click="return_no_receipt" style="font-size: 15px;">
+                No Receipt
+            </span>
+        </xpath>
+        <xpath expr="//span[hasclass('filters')]" position="inside">
+            <span id="rtn-filter" class="button rtn-filter" t-if='env.pos.config.show_returned_orders' t-on-click="rtn_filter" style="font-size: 15px;">
+               RTN
+            </span>
+        </xpath>
+    </t>
+    <!--<t t-extend="OrdersHistoryScreenWidget">
+        <t t-jquery=".button.back" t-operation="after">
+            <span class="button return-no-receipt">No Receipt</span>
+        </t>
+    </t>
+
+
+    <t t-extend="ProductCategoriesWidget">
+        <t t-jquery=".breadcrumbs" t-operation="append">
+            <t t-set="order" t-value="widget.pos.get_order()" />
+            <t
+                t-if="order and (order.get_mode() === 'return' || order.get_mode() === 'return_without_receipt')"
+            >
+                <span class="breadcrumb">
+                    <span class="breadcrumb-order">
+                        <t t-esc="order.name" />
+                    </span>
+                </span>
+            </t>
+        </t>
+        <t
+            t-jquery="t[t-if*='widget.subcategories.length > 0'] .categories"
+            t-operation="replace"
+        >
+            <t t-set="order" t-value="widget.pos.get_order()" />
+            <t
+                t-if="order and order.get_mode() !== 'return' and order.get_mode() !== 'return_without_receipt'"
+            >
+                <div class="categories">
+                    <div class="category-list-scroller touch-scrollable">
+                        <div class="category-list">
+                        </div>
+                    </div>
+                </div>
+            </t>
+        </t>
+    </t>
+    <t t-extend="Product">
+        <t
+            t-jquery="t[t-if='!product.to_weight'] t[t-esc*='widget.format_currency']"
+            t-operation="replace"
+        >
+            <t t-if="widget.return_mode and product.old_price">
+                <t t-esc="widget.format_currency(product.old_price,'Product Price')" />
+            </t>
+            <t t-if="!widget.return_mode || !product.old_price">
+                <t
+                    t-esc="widget.format_currency(product.get_price(pricelist, 1),'Product Price')"
+                />
+            </t>
+        </t>
+        <t
+            t-jquery="t[t-if='product.to_weight'] t[t-esc*='widget.format_currency']"
+            t-operation="replace"
+        >
+            <t t-if="widget.return_mode and product.old_price">
+                <t t-esc="widget.format_currency(product.old_price,'Product Price')" />
+            </t>
+            <t t-if="!widget.return_mode || !product.old_price">
+                <t
+                    t-esc="widget.format_currency(product.get_price(pricelist, 1),'Product Price')"
+                />
+            </t>
+        </t>
+    </t>-->
+    <!--
+    <t t-name="ProductsWidgetControlPanel" owl="1">
+        <div class="products-widget-control">
+            <t t-if="!props.hasNoCategories">
+                <div class="rightpane-header" t-att-class="{
+                    'green-border-bottom': !env.pos.config.iface_display_categ_images,
+                    'grey-border-bottom': env.pos.config.iface_display_categ_images,
+                }">
+
+                    <div class="breadcrumbs">
+                        <HomeCategoryBreadcrumb subcategories="props.subcategories" currentCat="props.breadcrumbs[props.breadcrumbs.length - 1]"/>
+                        <t t-if="!env.isMobile">
+                            <t t-foreach="props.breadcrumbs" t-as="category" t-key="category.id">
+                                <CategoryBreadcrumb category="category" />
+                            </t>
+                        </t>
+                    </div>
+
+                    <t t-if="props.subcategories.length > 0 and !env.pos.config.iface_display_categ_images and !env.isMobile">
+                        <t t-foreach="props.subcategories" t-as="category" t-key="category.id">
+                            <CategorySimpleButton category="category" />
+                        </t>
+                    </t>
+                </div>
+                <t t-if="props.subcategories.length > 0 and env.pos.config.iface_display_categ_images and !env.isMobile">
+                    <div class="categories">
+                        <div class="category-list-scroller">
+                            <div class="category-list">
+                                <t t-foreach="props.subcategories" t-as="category" t-key="category.id">
+                                    <CategoryButton category="category" />
+                                </t>
+                            </div>
+                        </div>
+                    </div>
+                </t>
+            </t>
+            <Portal target="'.pos .search-bar-portal'">
+                <div class="search-box">
+                    <span class="icon"><i class="fa fa-search"></i></span>
+                    <span t-on-click="clearSearch" class="clear-icon">
+                        <i class="fa fa-times" aria-hidden="true"></i>
+                    </span>
+                    <input t-ref="search-word-input" type="text" placeholder="Search Products..." t-on-keyup="updateSearch" />
+                </div>
+            </Portal>
+        </div>
+    </t>-->
+    <t t-name="ProductsWidgetControlPanel" t-inherit="point_of_sale.ProductsWidgetControlPanel" t-inherit-mode="extension" owl="1">
+        <xpath expr="//div[hasclass('products-widget-control')]" position="inside">
+            <t t-set="order" t-value="env.pos.get_order()" />
+            <t
+                t-if="order and (order.get_mode() === 'return' || order.get_mode() === 'return_without_receipt')"
+            >
+                <div class="rightpane-header" t-att-class="{
+                    'green-border-bottom': !env.pos.config.iface_display_categ_images,
+                    'grey-border-bottom': env.pos.config.iface_display_categ_images,
+                }">
+                <span class="breadcrumbs">
+                    <span class="breadcrumb-order">
+                        <t t-esc="order.name" />
+                    </span>
+                    <t t-if="order and (order.get_mode() === 'return' || order.get_mode() === 'return_without_receipt')">
+                        <!--<t t-if="order.get_edit_return() == true">-->
+                            <button class='btn_edit_return_take oe_hidden' style="color:white;background-color:#6EC89B;font-size:18px;line-height: 100%;height: 100%;min-width: 105px;" t-on-click.stop="trigger('click-take-exist-item')">
+                                Take Exist Items
+                            </button>
+                        <!--</t>-->
+                        <!--<t t-if="order.get_edit_return() != true">-->
+                            <button class='btn_edit_return_add' style="color:white;background-color:#6EC89B;font-size:18px;line-height: 100%;height: 100%;min-width: 105px;" t-on-click.stop="trigger('click-add-new-item')">
+                                Add New Items
+                            </button>
+                            <!--<button class='btn_edit_return_add2' style="color:white;background-color:#6EC89B;font-size:18px;line-height: 100%;height: 100%;min-width: 105px;" t-on-click.stop="trigger('click-add-new-item2')">
+                                <i class="fa fa-undo"/>
+                            </button>-->
+                        <!--</t>-->
+                    </t>
+                </span>
+                </div>
+            </t>
+        </xpath>
+        <!--<xpath expr="//div[hasclass('categories')]" position="replace">
+            <t t-set="order" t-value="env.pos.get_order()" />
+            <t
+                t-if="order and order.get_mode() !== 'return' and order.get_mode() !== 'return_without_receipt'"
+            >
+                <div class="categories">
+                    <div class="category-list-scroller">
+                        <div class="category-list">
+                            <t t-foreach="props.subcategories" t-as="category" t-key="category.id">
+                                <CategoryButton category="category" />
+                            </t>
+                        </div>
+                    </div>
+                </div>
+            </t>
+        </xpath>
+        <xpath expr="//div[hasclass('rightpane-header')]/t[1]" position="replace">
+            <t t-if="props.subcategories.length > 0 and !env.pos.config.iface_display_categ_images and !env.isMobile">
+                <t t-set="order" t-value="env.pos.get_order()" />
+                <t
+                    t-if="order and order.get_mode() !== 'return' and order.get_mode() !== 'return_without_receipt'"
+                >
+                <t t-foreach="props.subcategories" t-as="category" t-key="category.id">
+                    <CategorySimpleButton category="category" />
+                </t>
+                </t>
+            </t>
+        </xpath>-->
+    </t>
+    <!--
+    <t t-name="pos_orders_history_return.ProductItem" t-inherit="point_of_sale.ProductItem" t-inherit-mode="extension" owl="1">
+        <xpath expr="//span[hasclass('price-tag')]" position="replace">
+        	<t t-if="return_mode and props.product.old_price">
+                <span class="price-tag">
+                    <t t-esc="env.pos.format_currency(props.product.old_price,'Product Price')" />
+                </span>
+            </t>
+            <t t-else="">
+                <span class="price-tag">
+                    <t t-esc="price" />
+                </span>
+            </t>
+
+        </xpath>
+    </t>
+    -->
+
+
+</templates>

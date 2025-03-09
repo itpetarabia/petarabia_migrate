@@ -1,0 +1,566 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templates id="template" xml:space="preserve">
+    <!-- Full replace - may be -->
+    <t t-name="PosReportPrint" t-inherit="pos_orders_history_reprint.PosReportPrint" t-inherit-mode="extension" owl="1">
+        <xpath expr="//div[@class='pos-receipt']" position="attributes">
+            <attribute name="t-att-style">receiptFontSize</attribute>
+        </xpath>
+        <xpath expr="//div[@class='pos-receipt-contact']" position="attributes">
+            <attribute name="t-att-style">receiptFontSize</attribute>
+        </xpath>
+        <xpath expr="//t[@t-if='report_all.pos.company_logo_base64']" position="replace">
+            <t t-if="logoUrl">
+                <img class="pos-receipt-logo" t-att-src="logoUrl" alt="Logo" t-att-style="logoStyle"/>
+                <br/>
+            </t>
+        </xpath>
+        <xpath expr="//div[@class='pos-receipt']//div[5]" position="replace">
+            <!--<div class="pos-receipt-amount-change">
+                Change
+                <span t-esc="env.pos.format_currency(Math.abs(report_all.amount_return))" class="pos-receipt-right-align"/>
+            </div>-->
+        </xpath>
+        <xpath expr="//t[@t-foreach='report_all.payments']" position="replace">
+
+        </xpath>
+        <xpath expr="//br[3]" position="attributes">
+            <attribute name="t-if">1 == 2</attribute>
+        </xpath>
+        <xpath expr="//br[4]" position="attributes">
+            <attribute name="t-if">1 == 2</attribute>
+        </xpath>
+        <xpath expr="//br[5]" position="attributes">
+            <attribute name="t-if">1 == 2</attribute>
+        </xpath>
+
+        <xpath expr="//t[@t-if='report_all.company.name']" position="replace">
+            <h4 t-if="env.pos.config.show_company_name_receipt" style="margin-bottom:0px;margin-top:0px;">
+                <span t-esc="env.pos.config.company_name_receipt or report_all.company.name" />
+            </h4>
+            <t t-if="env.pos.config.show_company_address_receipt">
+                <t t-set="address" t-value="env.pos.config.company_address_receipt or report_all.contact_address_full"/>
+                <t t-set="count" t-value='0'/>
+                <div t-if="env.pos.config.show_company_name_receipt" style="margin-top:5px;"/>
+                <t t-foreach="address.split('/b/')" t-as="val">
+                    <t t-set="count" t-value="count+1"/>
+                    <t t-if="count != 1">
+                        <br/>
+                    </t>
+                    <span t-esc="val"/>
+                </t>
+
+            </t>
+
+
+
+        </xpath>
+        <xpath expr="//t[@t-if='report_all.company.phone']" position="replace">
+            <t t-if="env.pos.config.show_company_address_receipt and report_all.company.phone and !env.pos.config.company_address_receipt">
+                <div>Tel:<t t-esc="report_all.company.phone" /></div>
+            </t>
+        </xpath>
+        <xpath expr="//t[@t-if='report_all.company.vat']" position="replace">
+            <t t-if="env.pos.config.show_vat_no_receipt and (env.pos.config.vat_no_receipt or report_all.company.vat)">
+                <div>Tax ID:<t t-esc="env.pos.config.vat_no_receipt or report_all.company.vat" /></div>
+            </t>
+        </xpath>
+        <xpath expr="//t[@t-if='report_all.company.email']" position="replace">
+            <t t-if="env.pos.config.show_company_address_receipt and report_all.company.email and !env.pos.config.company_address_receipt">
+                <div><t t-esc="report_all.company.email" /></div>
+            </t>
+        </xpath>
+        <xpath expr="//t[@t-if='report_all.company.website']" position="replace">
+            <t t-if="env.pos.config.show_company_address_receipt and report_all.company.website and !env.pos.config.company_address_receipt">
+                <div><t t-esc="report_all.company.website" /></div>
+            </t>
+        </xpath>
+        <xpath expr="//div[@t-if='env.pos.config.receipt_header']" position="replace">
+            <div t-if="env.pos.config.show_company_name_receipt or env.pos.config.show_company_address_receipt" style="margin-top:7px;"/>
+            <t t-set="count" t-value='0'/>
+            <t t-foreach="env.pos.config.receipt_header.split('/b/')" t-as="val">
+                <t t-set="count" t-value="count+1"/>
+                <t t-if="count != 1">
+                    <br/>
+                </t>
+                <t t-esc="val"/>
+            </t>
+        </xpath>
+        <xpath expr="//div[@class='orderlines']" position="before">
+            <h4 t-if="env.pos.config.title_receipt" class='pos-center-align' style="margin-top:-5px;margin-bottom:0px;">
+            	<span t-esc="env.pos.config.title_receipt"/>
+            </h4>
+
+            <div t-if="env.pos.config.title_receipt" style="margin-top:7px;"/>
+            <table  style="width:100%;margin-bottom:0px;">
+                <colgroup>
+                    <col width='25%' />
+                    <col width='5%' />
+                    <col width='70%' />
+                </colgroup>
+                <tr>
+                	<td>Order No </td>
+                    <td>:</td>
+                	<td>
+                        <t t-esc="report_all.reference"/>
+                    </td>
+                </tr>
+                <tr>
+                	<td>Date</td>
+                    <td> :</td>
+                	<td><t t-esc="report_all.date"/></td>
+                </tr>
+                <tr t-if="env.pos.config.show_cashier_receipt and report_all.cashier_name">
+                	<td>Cashier</td>
+                    <td>:</td>
+                	<td><t t-esc="report_all.cashier_name"/></td>
+                </tr>
+
+                <t t-if="env.pos.config.show_customer_receipt and report_all.client">
+                    <br/>
+                    <tr>
+                        <td>Customer</td>
+                        <td>:</td>
+                        <td>
+                            <t t-esc="report_all.client"/>
+                            <br t-if="report_all.client_phone"/>
+                            <t t-esc="report_all.client_phone"/>
+                        </td>
+                    </tr>
+                </t>
+
+            </table>
+        </xpath>
+
+        <xpath expr="//t[@t-if='report_all.cashier_name']" position="replace"/>
+
+        <xpath expr="//div[@class='orderlines']" position="replace">
+
+            <table class='receipt-orderlines' style="width:100%;margin-top:7px;margin-bottom:0px;">
+                <colgroup>
+                    <col/>
+                    <col width='23%' />
+                    <col width='25%' />
+					<col width='10%' t-if="env.pos.config.show_vat_summary_receipt"/>
+                </colgroup>
+                <tr style="border-bottom: dotted 1px;">
+					<td>Item</td>
+					<td class='pos-right-align'>Qty</td>
+					<td class='pos-right-align'>Price</td>
+					<td class='pos-right-align' t-if="env.pos.config.show_vat_summary_receipt"/>
+				</tr>
+                <t t-foreach="report_all.order_line" t-as="line" t-key="line.id">
+                    <tr>
+                        <td>
+                            <t t-if="line">
+
+                                <div t-esc="line.product_name" />
+                                <t t-if="line.discount !== 0">
+                                    <div class="pos-receipt-left-padding">
+                                        Discount: <t t-esc="line.discount" />%
+                                    </div>
+                                </t>
+                                <t t-set="price_total" t-value="price_total+(line.price_subtotal)"/>
+                            </t>
+                        </td>
+                        <td class='pos-right-align'>
+                            <t t-esc="Math.round(line.quantity * Math.pow(10, env.pos.dp['Product Unit of Measure'])) / Math.pow(10, env.pos.dp['Product Unit of Measure'])"/>
+                            <t t-if="line.uom !== 'Units'" t-esc="line.uom" />
+                        </td>
+                        <td class='pos-right-align'>
+                            <t t-esc="env.pos.format_currency_no_symbol(line.price_subtotal_incl)" />
+                        </td>
+                        <td class="pos-right-align" t-if="env.pos.config.show_vat_summary_receipt">
+                            <t t-if='line.taxDetails'>
+                                <t t-foreach="line.taxDetails" t-as="tax_id">
+                                    <t t-esc="tax_id" t-if="tax_id"/>
+                                </t>
+						    </t>
+                        </td>
+                    </tr>
+                </t>
+            </table>
+        </xpath>
+
+        <xpath expr="//div[@class='pos-receipt-right-align']" position="replace"/>
+
+        <xpath expr="//div[@class='pos-receipt-amount-change']" position="replace">
+        <table class='receipt-total' style="width:100%;">
+            <br/>
+            <tr>
+                <td>Subtotal:</td>
+                <td class="pos-right-align">
+                    <t t-if="report_all.price_incl">
+                        <span t-esc="env.pos.format_currency(tax_total + price_total)" class="pos-receipt-right-align"/>
+                    </t>
+                    <t t-else="">
+                        <span t-esc="env.pos.format_currency(price_total)" class="pos-receipt-right-align"/>
+                    </t>
+
+                </td>
+            </tr>
+            <tr t-if="report_all.disc_amount">
+                <td>Discount:</td>
+                <td class="pos-right-align">
+                    <span t-esc="env.pos.format_currency(report_all.disc_amount)" class="pos-receipt-right-align"/>
+                </td>
+            </tr>
+            <tr class="pos-receipt-amount">
+                <td>Total:</td>
+                <td class="pos-right-align">
+                    <span t-esc="env.pos.format_currency(tax_total + price_total)" class="pos-receipt-right-align"/>
+                </td>
+            </tr>
+            <tr t-if="report_all.amount_round">
+                <td>Rounded:</td>
+                <td class="pos-right-align">
+                    <span t-esc="env.pos.format_currency(report_all.total_paid)" class="pos-receipt-right-align"/>
+                </td>
+            </tr>
+            <br/>
+            <tr t-foreach="report_all.payments" t-as="line" t-key="line.name">
+                <td>
+                    <t t-esc="line.name"/>
+                </td>
+                 <td class="pos-right-align">
+                    <span t-esc="env.pos.format_currency_no_symbol(line.total)" class="pos-receipt-right-align"/>
+                </td>
+            </tr>
+
+            <br/>
+            <tr>
+                <td>
+                    Change
+                </td>
+                 <td class="pos-right-align">
+                    <span t-esc="env.pos.format_currency(Math.abs(report_all.amount_return))" class="pos-receipt-right-align"/>
+                </td>
+            </tr>
+        </table>
+        </xpath>
+        <xpath expr="//t[@t-if='report_all.amount_round']" position="replace"/>
+        <xpath expr="//t[@t-if='report_all.total_paid']" position="replace"/>
+        <xpath expr="//t[@t-if='report_all.disc_amount']" position="replace"/>
+        <xpath expr="//t[@t-foreach='report_all.taxes'][2]" position="replace"/>
+        <xpath expr="//t[@t-if='tax_total']" position="replace"/>
+
+
+
+        <xpath expr="//div[@class='before-footer']" position="after">
+
+            <t t-set="taxdetails" t-value='report_all.taxes' t-if="env.pos.config.show_vat_summary_receipt"/>
+			<h5 class='pos-center-align' style="margin-bottom:5px;" t-if="env.pos.config.show_vat_summary_receipt and taxdetails.length > 0">VAT SUMMARY</h5>
+        	<table class='receipt-tax' t-if="env.pos.config.show_vat_summary_receipt and taxdetails.length > 0" style="width:100%;">
+
+                <colgroup>
+                	<col width='15%' />
+                    <col width='10%' />
+                    <col width='25%' />
+					<col width='25%' />
+					<col width='25%' />
+				</colgroup>
+				<tr style="border-bottom: dotted 1px;">
+					<td>Code</td>
+					<td>Rate</td>
+					<td style="text-align:right;">Gross</td>
+					<td style="text-align:right;">VAT</td>
+					<td style="text-align:right;">Total</td>
+				</tr>
+				<t t-set="sum_base" t-value="0"/>
+				<t t-set="sum_vat" t-value="0"/>
+				<t t-set="sum_total" t-value="0"/>
+				<t t-foreach="taxdetails" t-as="taxdetail">
+                    <tr>
+                    	<td><t t-esc="taxdetail.code" t-if="taxdetail.code"/></td>
+                    	<td>
+
+                    		<t t-esc="taxdetail.percent" />
+
+                    		<t t-if="['division','percent'].includes(taxdetail.amount_type)">
+                    			%
+                    		</t>
+
+                    	</td>
+						<td style="text-align:right;">
+                            <t t-esc="env.pos.format_currency_no_symbol(taxdetail.base - taxdetail.total)" t-if="report_all.price_incl == false"/>
+                            <t t-esc="env.pos.format_currency_no_symbol(taxdetail.base)" t-if="report_all.price_incl == true"/>
+                            <!--
+                            <t t-esc="env.pos.format_currency_no_symbol(taxdetail.base)"/>
+                            -->
+                        </td>
+						<td style="text-align:right;">
+                            <t t-esc="env.pos.format_currency_no_symbol(taxdetail.total)" />
+                        </td>
+						<td style="text-align:right;">
+							
+
+                            <t t-esc="env.pos.format_currency(taxdetail.base)" t-if="report_all.price_incl == false"/>
+                            <t t-esc="env.pos.format_currency(taxdetail.base + taxdetail.total)" t-if="report_all.price_incl == true"/>
+                            <!--
+                            <t t-esc="env.pos.format_currency(taxdetail.base + taxdetail.total)"/>
+                            -->
+                        </td>
+                        <t t-set="sum_vat" t-value="sum_vat + taxdetail.total"/>
+                        <!--
+                        <t t-set="sum_base" t-value="sum_base + taxdetail.base"/>
+                        <t t-set="sum_total" t-value="sum_total + taxdetail.base + taxdetail.total"/>
+                        -->
+			    
+                    	<t t-set="sum_base" t-value="sum_base + taxdetail.base - taxdetail.total" t-if="report_all.price_incl == false"/>
+						<t t-set="sum_total" t-value="sum_total + taxdetail.base" t-if="report_all.price_incl == false"/>
+
+                        <t t-set="sum_base" t-value="sum_base + taxdetail.base" t-if="report_all.price_incl == true"/>
+						<t t-set="sum_total" t-value="sum_total + taxdetail.base + taxdetail.total" t-if="report_all.price_incl  == true"/>
+
+                    </tr>
+                </t>
+                <tr style="border-top: dotted 1px">
+                   	<td>Total</td>
+                   	<td/>
+                   	<td style="text-align:right;"><t t-esc="env.pos.format_currency(sum_base)" /></td>
+					<td style="text-align:right;"><t t-esc="env.pos.format_currency(sum_vat)" /></td>
+					<td style="text-align:right;"><t t-esc="env.pos.format_currency(sum_total)" /></td>
+                </tr>
+            </table>
+            <br/>
+        </xpath>
+
+        <xpath expr="//div[@t-if='env.pos.config.receipt_footer']" position="replace">
+        <div class="pos-receipt-center-align" t-if="env.pos.config.receipt_footer">
+           <br/>
+            <t t-set="count" t-value='0'/>
+            <t t-foreach="env.pos.config.receipt_footer.split('/b/')" t-as="val">
+                <t t-set="count" t-value="count+1"/>
+                <t t-if="count != 1">
+                    <br/>
+                </t>
+                <t t-esc="val"/>
+            </t>
+       </div>
+       </xpath>
+        <xpath expr="//div[@class='pos-receipt-order-data']" position="replace"/>
+
+
+
+        <!--
+        <xpath expr="//div[hasclass('pos-receipt')]" position="replace">
+             <div class="pos-receipt" t-att-style="receiptFontSize">
+                 <t t-if="logoUrl">
+                    <img class="pos-receipt-logo" t-att-src="logoUrl" alt="Logo" t-att-style="logoStyle"/>
+                    <br/>
+                 </t>
+                 <t t-if="!report_all.pos.company_logo_base64">
+                    <h2 class="pos-receipt-center-align">
+                        <t t-esc="report_all.company.name" />
+                    </h2>
+                    <br/>
+                </t>
+                 <div class="pos-receipt-contact" t-att-style="receiptFontSize">
+                    <h4 t-if="env.pos.config.show_company_name_receipt" style="margin-bottom:0px;margin-top:0px;">
+                        <span t-esc="env.pos.config.company_name_receipt or report_all.company.name" />
+                    </h4>
+                     <t t-if="env.pos.config.show_company_address_receipt">
+                        <t t-set="address" t-value="env.pos.config.company_address_receipt or report_all.contact_address_full"/>
+                        <t t-set="count" t-value='0'/>
+                        <div t-if="env.pos.config.show_company_name_receipt" style="margin-top:5px;"/>
+                        <t t-foreach="address.split('/b/')" t-as="val">
+                            <t t-set="count" t-value="count+1"/>
+                            <t t-if="count != 1">
+                                <br/>
+                            </t>
+                            <span t-esc="val"/>
+                        </t>
+
+                    </t>
+                    <t t-if="env.pos.config.show_company_address_receipt and report_all.company.phone and !env.pos.config.company_address_receipt">
+                        <div>Tel:<t t-esc="report_all.company.phone" /></div>
+                    </t>
+                    <t t-if="env.pos.config.show_vat_no_receipt and (env.pos.config.vat_no_receipt or report_all.company.vat)">
+                        <div>Tax ID:<t t-esc="env.pos.config.vat_no_receipt or report_all.company.vat" /></div>
+                    </t>
+                    <t t-if="env.pos.config.show_company_address_receipt and report_all.company.email and !env.pos.config.company_address_receipt">
+                        <div><t t-esc="report_all.company.email" /></div>
+                    </t>
+                    <t t-if="env.pos.config.show_company_address_receipt and report_all.company.website and !env.pos.config.company_address_receipt">
+                        <div><t t-esc="report_all.company.website" /></div>
+                    </t>
+                    <div t-if="env.pos.config.show_company_name_receipt or env.pos.config.show_company_address_receipt" style="margin-top:7px;"/>
+                    <t t-set="count" t-value='0'/>
+                    <t t-foreach="env.pos.config.receipt_header.split('/b/')" t-as="val">
+                        <t t-set="count" t-value="count+1"/>
+                        <t t-if="count != 1">
+                            <br/>
+                        </t>
+                        <t t-esc="val"/>
+                    </t>
+
+                </div>
+                <br />
+                 <t t-set="price_total" t-value="0"/>
+                 <h4 t-if="env.pos.config.title_receipt" class='pos-center-align' style="margin-top:-5px;margin-bottom:0px;">
+            	<span t-esc="env.pos.config.title_receipt"/>
+            </h4>
+
+            <div t-if="env.pos.config.title_receipt" style="margin-top:7px;"/>
+            <table  style="width:100%;margin-bottom:0px;">
+                <colgroup>
+                    <col width='25%' />
+                    <col width='5%' />
+                    <col width='70%' />
+                </colgroup>
+                <tr>
+                	<td>Order No </td>
+                    <td>:</td>
+                	<td>
+                        <t t-esc="report_all.reference"/>
+                    </td>
+                </tr>
+                <tr>
+                	<td>Date</td>
+                    <td> :</td>
+                	<td><t t-esc="report_all.date"/></td>
+                </tr>
+                <tr t-if="env.pos.config.show_cashier_receipt and report_all.cashier_name">
+                	<td>Cashier</td>
+                    <td>:</td>
+                	<td><t t-esc="report_all.cashier_name"/></td>
+                </tr>
+
+                <t t-if="env.pos.config.show_customer_receipt and report_all.client">
+                    <br/>
+                    <tr>
+                        <td>Customer</td>
+                        <td>:</td>
+                        <td>
+                            <t t-esc="report_all.client"/>
+                            <br t-if="report_all.client_phone"/>
+                            <t t-esc="report_all.client_phone"/>
+                        </td>
+                    </tr>
+                </t>
+
+            </table>
+            <table class='receipt-orderlines' style="width:100%;margin-top:7px;margin-bottom:0px;">
+                <colgroup>
+                    <col/>
+                    <col width='23%' />
+                    <col width='25%' />
+					<col width='10%' t-if="env.pos.config.show_vat_summary_receipt"/>
+                </colgroup>
+                <tr style="border-bottom: dotted 1px;">
+					<td>Item</td>
+					<td class='pos-right-align'>Qty</td>
+					<td class='pos-right-align'>Price</td>
+					<td class='pos-right-align' t-if="env.pos.config.show_vat_summary_receipt"/>
+				</tr>
+                <t t-foreach="report_all.order_line" t-as="line" t-key="line.id">
+                    <tr>
+                        <td>
+                            <t t-if="line">
+
+                                <div t-esc="line.product_name" />
+                                <t t-if="line.discount !== 0">
+                                    <div class="pos-receipt-left-padding">
+                                        Discount: <t t-esc="line.discount" />%
+                                    </div>
+                                </t>
+                                <t t-set="price_total" t-value="price_total+(line.price_subtotal)"/>
+
+                            </t>
+                        </td>
+                        <td class='pos-right-align'>
+                            <t t-esc="Math.round(line.quantity * Math.pow(10, env.pos.dp['Product Unit of Measure'])) / Math.pow(10, env.pos.dp['Product Unit of Measure'])"/>
+                            <t t-if="line.uom !== 'Units'" t-esc="line.uom" />
+                        </td>
+                        <td class='pos-right-align'>
+                            <t t-esc="env.pos.format_currency_no_symbol(line.price_subtotal_incl)" />
+                        </td>
+                        <td class="pos-right-align" t-if="env.pos.config.show_vat_summary_receipt">
+                            <t t-if='line.taxDetails'>
+                                <t t-foreach="line.taxDetails" t-as="tax_id">
+                                    <t t-esc="tax_id" t-if="tax_id"/>
+                                </t>
+						    </t>
+                        </td>
+                    </tr>
+                </t>
+            </table>
+            <br/>
+            <t t-set="tax_total" t-value="0"/>
+            <t t-foreach="report_all.taxes" t-as="tax" t-key="tax.name">
+                <t t-set="tax_total" t-value="tax_total+tax.total"/>
+            </t>
+
+            <table class='receipt-total' style="width:100%;">
+                <br/>
+                <tr>
+                    <td>Subtotal:</td>
+                    <td class="pos-right-align">
+                        <span t-esc="env.pos.format_currency(price_total)" class="pos-receipt-right-align"/>
+                    </td>
+                </tr>
+                <tr t-if="receipt.total_discount">
+                    <td>Discount:</td>
+                    <td class="pos-right-align">
+                        <span t-esc="env.pos.format_currency(report_all.disc_amount)" class="pos-receipt-right-align"/>
+                    </td>
+                </tr>
+                <tr class="pos-receipt-amount">
+                    <td>Total:</td>
+                    <td class="pos-right-align">
+                        <span t-esc="env.pos.format_currency(tax_total + price_total)" class="pos-receipt-right-align"/>
+                    </td>
+                </tr>
+                <tr t-if="receipt.total_rounded != receipt.total_with_tax">
+                    <td>Rounded:</td>
+                    <td class="pos-right-align">
+                        <span t-esc="env.pos.format_currency(report_all.amount_round)" class="pos-receipt-right-align"/>
+                    </td>
+                </tr>
+                <br/>
+                <tr t-foreach="report_all.payments" t-as="line" t-key="line.name">
+                    <td>
+                        <t t-esc="line.name"/>
+                    </td>
+                     <td class="pos-right-align">
+                        <span t-esc="env.pos.format_currency_no_symbol(line.total)" class="pos-receipt-right-align"/>
+                    </td>
+                </tr>
+                <br/>
+                <tr t-if="!props.isBill">
+                    <td>
+                        Change
+                    </td>
+                     <td class="pos-right-align">
+                        <span t-esc="env.pos.format_currency(Math.abs(report_all.amount_return))" class="pos-receipt-right-align"/>
+                    </td>
+                </tr>
+            </table>
+
+
+
+            <t t-if="report_all.pos_order_barcode">
+                <div class="pos-center-align" align="center">
+                    <img style="width:300px;height:100px;" t-att-src='report_all.pos_order_barcode' alt="Reference"/>
+                </div>
+            </t>
+            <div class="pos-receipt-center-align" t-if="env.pos.config.receipt_footer">
+               <br/>
+                <t t-set="count" t-value='0'/>
+                <t t-foreach="env.pos.config.receipt_footer.split('/b/')" t-as="val">
+                    <t t-set="count" t-value="count+1"/>
+                    <t t-if="count != 1">
+                        <br/>
+                    </t>
+                    <t t-esc="val"/>
+                </t>
+           </div>
+            </div>
+        </xpath>
+        -->
+
+
+
+
+
+    </t>
+</templates>

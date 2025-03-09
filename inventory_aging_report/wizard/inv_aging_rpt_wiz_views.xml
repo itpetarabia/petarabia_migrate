@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+        <record id="view_from_inv_aging_rpt_wiz" model="ir.ui.view">
+            <field name="name">inv.aging.rpt.wiz.form</field>
+            <field name="model">inv.aging.rpt.wiz</field>
+            <field name="arch" type="xml">
+                <form string="Inventory Aging Report">
+                	<group>
+	                   <group col='2' colspan='2'>
+                           <field name="date"/>
+	                	</group>
+                    	<group col='4' colspan='4'>
+                            <field name="prod_categ_ids" widget="many2many_tags" options="{'no_create':True}"/>
+                            <field name="warehouse_ids" widget="many2many_tags" options="{'no_create':True}"/>
+                            <field name="product_ids" widget="many2many_tags" options="{'no_create':True}" invisible="1"/>
+                        </group>
+                    </group>
+                    <footer>
+                        <button name="generate_report" context="{'file_type':'xls'}" string="Download Excel" type="object" class="btn-primary"/>
+                        <button string="Cancel" class="btn-secondary" special="cancel" />
+                    </footer>
+                </form>
+            </field>
+        </record>
+
+       	<record id="action_inv_aging_rpt_wiz" model="ir.actions.act_window">
+            <field name="name">Inventory Aging Report</field>
+            <field name="res_model">inv.aging.rpt.wiz</field>
+            <field name="view_mode">form</field>
+            <field name="target">new</field>
+        </record>
+
+       <menuitem id="menu_report_inv_aging"
+            name="Inventory Aging"
+            sequence='50'
+            parent="stock.menu_warehouse_report"
+            action="action_inv_aging_rpt_wiz"
+       />
+</odoo>

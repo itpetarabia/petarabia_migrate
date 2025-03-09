@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <template id="payment_tokens_list_save_card" inherit_id="payment.payment_tokens_list">
+         <xpath expr="//div[hasclass('clearfix')]/t" position="before">
+
+             <label t-if="mode != 'manage' and acq.save_token == 'ask'">
+                <input type="checkbox" name="save_card" />
+                    Save my payment data
+             </label>
+       </xpath>
+    </template>
+
+
+</odoo>

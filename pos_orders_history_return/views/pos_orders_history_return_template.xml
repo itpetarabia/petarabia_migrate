@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!-- Copyright 2018 Dinar Gabbasov <https://it-projects.info/team/GabbasovDinar>
+     License MIT (https://opensource.org/licenses/MIT). -->
+<odoo>
+    <template
+        id="assets_backend"
+        name="pos_orders_history_return assets"
+        inherit_id="point_of_sale.assets"
+    >
+        <xpath expr="." position="inside">
+            <script
+                type="text/javascript"
+                src="/pos_orders_history_return/static/src/js/OrderHistoryScreen.js"
+            />
+            <script
+                type="text/javascript"
+                src="/pos_orders_history_return/static/src/js/models.js"
+            />
+            <script
+                type="text/javascript"
+                src="/pos_orders_history_return/static/src/js/ProductsWidget.js"
+            />
+            <script
+                type="text/javascript"
+                src="/pos_orders_history_return/static/src/js/ProductItem.js"
+            />
+            <link
+                rel="stylesheet"
+                href="/pos_orders_history_return/static/src/css/pos.css"
+            />
+            <script
+                type="text/javascript"
+                src="/pos_orders_history_return/static/src/js/ProductScreen.js"
+            />
+        </xpath>
+    </template>
+    <!--<template
+        id="demo_assets_backend"
+        name="pos_orders_history demo assets"
+        inherit_id="web.assets_backend"
+    >
+        <xpath expr="." position="inside">
+            <script
+                type="text/javascript"
+                src="/pos_orders_history_return/static/src/js/tour.js"
+            />
+        </xpath>
+    </template>-->
+</odoo>

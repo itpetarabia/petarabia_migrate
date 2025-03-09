@@ -1,0 +1,19 @@
+.customerinfo .subtitle{
+    text-align: center;
+}
+
+.customerinfo .title {
+    font-size: 15px;
+    text-align: center;
+}
+
+.orderinfo{
+    text-align: center;
+    font-size: 9px;
+}
+
+.underline{
+  padding-bottom: 2px;
+  border-bottom: 1px solid dotted;
+
+}

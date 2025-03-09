@@ -1,0 +1,219 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!-- Copyright 2017-2018 Dinar Gabbasov <https://it-projects.info/team/GabbasovDinar>
+     Copyright 2018 Artem Losev
+     License MIT (https://opensource.org/licenses/MIT). -->
+<templates id="template" xml:space="preserve">
+    <!--<t t-name="OrdersHistoryButton" owl="1">
+        <div class='control-button orders-history'>
+            <i class='fa fa-list-alt ' /> History
+        </div>
+    </t>-->
+
+    <t t-name="ActionpadWidget" t-inherit="point_of_sale.ActionpadWidget" t-inherit-mode="extension" owl="1">
+        <xpath expr="//div[hasclass('actionpad')]/button[last()]" position="before">
+            <button class="button history" t-on-click="trigger('click-history')">
+                <i class='fa fa-list-alt' role="img" aria-label="History" title="History"/>
+                History
+            </button>
+        </xpath>
+        <xpath expr="//div[hasclass('actionpad')]/button[last()]" position="replace">
+            <button class="button paymt" t-on-click="trigger('click-pay')">
+                <i class="fa fa-chevron-right" role="img" aria-label="Pay" title="Pay" />
+                Payment
+            </button>
+        </xpath>
+    </t>
+
+
+    <t t-name="OrdersHistoryScreenWidget" owl="1">
+        <div class="orders-list-screen screen">
+            <div class="screen-content">
+                <section class="top-content">
+                    <span class='button back' t-on-click="back" style="font-size: 15px;">
+                        <i class='fa fa-angle-double-left' />
+                        Back
+                    </span>
+                    <!-- extra -->
+                    <span class='button update_history' t-on-click="update_history" style="font-size: 15px;">
+                        Update List
+                    </span>
+                    <!--  -->
+                    <span class="filters">
+                        <i class='fa fa-filter' />
+                        Filters
+                        <span id="user-filter" class="button user-filter" t-on-click="user_filter" style="font-size: 15px;">
+                            User
+                        </span>
+                        <span id="pos-filter" class="button pos-filter" t-on-click="pos_filter" style="font-size: 15px;">
+                            POS
+                        </span>
+                        <!--<span class="button table-filter" t-on-click="table_filter">
+                            Table
+                        </span>-->
+                        <span id="today-filter" class="button today-filter" t-on-click="today_filter" style="font-size: 15px;">
+	                       Today
+	                    </span>
+                    </span>
+                    <span
+                        t-if="env.pos.config.load_barcode_order_only"
+                        class="button scan-barcode" t-on-click="scan_barcode" style="font-size: 15px;"
+                    >Scan Barcode</span>
+                    <span class='searchbox'>
+                        <input placeholder='Search Orders' t-on-keyup="__showPosOrderHistory"/>
+                        <span class='search-clear' />
+                    </span>
+                    <span class='searchbox' />
+                </section>
+                <section class="full-content">
+                    <div class='window'>
+                        <section class='subwindow collapsed'>
+                            <div class='subwindow-container collapsed'>
+                                <div
+                                    class='subwindow-container-fix orders-details-contents'
+                                >
+                                </div>
+                            </div>
+                        </section>
+                        <section class='subwindow'>
+                            <div class='subwindow-container'>
+                                <div
+                                    class='subwindow-container-fix touch-scrollable scrollable-y'
+                                >
+                                    <table class='order-list'>
+                                        <thead>
+                                            <tr>
+                                                <th>Order Ref</th>
+                                                <th>Customer</th>
+                                                <th>POS</th>
+                                                <th>Order Date</th>
+                                                <th>Salesman</th>
+                                                <!-- extra-->
+                                                <th>Total</th>
+                                                <!-- -->
+                                                <th>Status</th>
+                                                <th
+                                                    class="actions"
+                                                ></th>
+                                            </tr>
+                                        </thead>
+                                        <tbody id='order_list_contents'>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </section>
+                    </div>
+                </section>
+            </div>
+        </div>
+    </t>
+    <t t-name="OrderHistory">
+        <tr class='order-line' t-att-data-id='order.id'>
+            <td>
+                <span class='details'>
+                    <t t-esc='order.pos_reference' />
+                </span>
+            </td>
+            <td>
+                <t t-if='order.partner_id' t-esc='order.partner_id[1]' />
+                <t t-if='!order.partner_id' t-esc='""' />
+            </td>
+            <td>
+                <t t-esc='order.pos_name' />
+            </td>
+            <td>
+                <t t-esc='widget.get_datetime_format(order.date_order)' />
+            </td>
+            <td>
+                <t t-esc='order.user_id[1]' />
+            </td>
+            <!-- extra -->
+            <td>
+                <t t-esc='widget.env.pos.format_currency(order.amount_total)' />
+            </td>
+            <!-- -->
+            <t t-if="!order.computed_state">
+                <td>
+                    <t t-if="order.state == 'done'">
+                        Posted
+                    </t>
+                    <t t-if="order.state == 'paid'">
+                        Paid
+                    </t>
+                    <t t-if="order.state == 'cancel'">
+                        Cancelled
+                    </t>
+                </td>
+            </t>
+            <t t-if="order.computed_state">
+                <td>
+                    <t t-if="order.computed_state == 'done'">
+                        Posted
+                    </t>
+                    <t t-if="order.computed_state == 'paid'">
+                        Paid
+                    </t>
+                    <t t-if="order.computed_state == 'cancel'">
+                        Cancelled
+                    </t>
+                </td>
+            </t>
+            <td class="actions {{showbutton}}" name="td_action">
+            </td>
+        </tr>
+    </t>
+    <t t-name="LinesHeader">
+        <tr>
+            <th>Image</th>
+            <th>Product</th>
+            <th>Quantity</th>
+            <th>Unit Price</th>
+            <th>Discount</th>
+            <th>Taxes</th>
+            <th>Subtotal w/o Tax</th>
+            <th>Subtotal</th>
+        </tr>
+    </t>
+    <t t-name="LineHistory">
+        <tr class='line-line'>
+            <td>
+                <div class="line_image">
+                    <img t-att-src="line.image" />
+                </div>
+            </td>
+            <td>
+                <t t-esc='line.product_id[1]' />
+            </td>
+            <td>
+                <t t-esc='line.qty' />
+            </td>
+            <td>
+                <t t-esc='widget.env.pos.format_currency(line.price_unit)' />
+
+            </td>
+            <td>
+                <t t-esc='line.discount' />
+            </td>
+            <td>
+                <t t-esc='line.tax_ids' />
+            </td>
+            <td>
+                <t t-esc='widget.env.pos.format_currency(line.price_subtotal)' />
+
+            </td>
+            <td>
+                <t t-esc='widget.env.pos.format_currency(line.price_subtotal_incl)' />
+
+            </td>
+        </tr>
+    </t>
+    <t t-name="OrderReceipt" t-inherit="point_of_sale.OrderReceipt" t-inherit-mode="extension" owl="1">
+        <xpath expr="//div[hasclass('pos-receipt')]//div[hasclass('before-footer')]" position="inside">
+            <t t-if="receipt.pos_order_barcode">
+            <div class="pos-center-align" align="center">
+                <img style="width:300px;height:100px;" t-att-src='receipt.pos_order_barcode' alt="Reference"/>
+            </div>
+            </t>
+        </xpath>
+    </t>
+</templates>
